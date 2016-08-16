@@ -89,6 +89,7 @@ table {
 	resize: none;
 	width: 100%;
 	border: none;
+	overflow: hidden;
 	background-color: transparent;
 	color: #fff;
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light",
