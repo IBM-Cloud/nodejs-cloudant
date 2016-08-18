@@ -81,14 +81,15 @@ function initDBConnection() {
 		//dbCredentials.user = "REPLACE ME";
 		//dbCredentials.password = "REPLACE ME";
 		//dbCredentials.url = "REPLACE ME";
-        //cloudant = require('cloudant')(dbCredentials.url);
+		
+		//cloudant = require('cloudant')(dbCredentials.url);
+		
+		// check if DB exists if not create
+        	//cloudant.db.create(dbCredentials.dbName, function (err, res) {
+        	//    if (err) { console.log('could not create db ', err); }
+        	//});
             
-        // check if DB exists if not create
-        //cloudant.db.create(dbCredentials.dbName, function (err, res) {
-        //    if (err) { console.log('could not create db ', err); }
-        //});
-            
-        //db = cloudant.use(dbCredentials.dbName);
+        	//db = cloudant.use(dbCredentials.dbName);
 	}
 }
 
