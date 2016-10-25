@@ -64,14 +64,14 @@ table {
 	vertical-align: top;
 }
 .contentName {
-	padding: 15px;
+	padding: 10px;
 	padding-left: 20px;
 	width: 25%;
 	font-weight:bold;
 	vertical-align: top;
 }
 .contentDetails {
-	padding: 15px;
+	padding: 10px;
 }
 .contentAction {
 	width: 10%;
@@ -149,7 +149,7 @@ tr:hover .deleteBtn {
 }
 
 .appTitle {
-	padding: 20px;
+	padding: 15px;
   margin: 0 auto;
   text-align: center;
 	font-size: 1.5rem;

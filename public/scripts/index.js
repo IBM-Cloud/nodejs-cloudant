@@ -138,7 +138,7 @@ function setRowContent(item, row)
 
 				} else if(attachment.content_type.indexOf("video/")==0)
 				{
-					innerHTML+= "<div class='contentTiles'>"+attachment.key+"<br><VIDEO  height=\"100\" width=\"150\" src=\""+attachment.url+"\" controls></VIDEO></div>" ;
+					innerHTML+= "<div class='contentTiles'>"+attachment.key+"<br><VIDEO  height=\"150\" src=\""+attachment.url+"\" controls></VIDEO></div>" ;
 
 				} else if(attachment.content_type.indexOf("text/")==0 || attachment.content_type.indexOf("application/")==0)
 				{
