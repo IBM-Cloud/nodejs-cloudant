@@ -69,7 +69,8 @@ table {
 }
 .content {
 	padding: 5px;
-	width: 60%;
+	width: 40%;
+	vertical-align: top;
 
 }
 .contentName {
@@ -129,7 +130,7 @@ table {
 }
 
 tr:hover .deleteBtn {
-	
+
 	cursor: pointer;
 }
 
@@ -167,7 +168,7 @@ tr:hover .deleteBtn {
 	padding: 5px;
 	height: 50;
 	font-size: small;
-	
+
 }
 
 
