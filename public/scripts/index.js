@@ -105,11 +105,11 @@ function uploadFile(node)
 
 }
 
-var attachButton = "<br><input type=\"file\" name=\"file\" id=\"upload_file\"><input width=\"100\" type=\"submit\" value=\"Upload\" onClick='uploadFile(this)'>";
+var attachButton = "<br><div class='uploadBox'><input type=\"file\" name=\"file\" id=\"upload_file\"><input width=\"100\" type=\"submit\" value=\"Upload\" onClick='uploadFile(this)'></div>";
 
 function setRowContent(item, row)
 {
-		var innerHTML = "<td class='contentName'><textarea id='nameText' class = 'nameText' onkeydown='onKey(event)'>"+item.name+"</textarea></td><td class='contentDetails'><table>";
+		var innerHTML = "<td class='contentName'><textarea id='nameText' class = 'nameText' onkeydown='onKey(event)'>"+item.name+"</textarea></td><td class='contentDetails'>";
 
 		var valueTextArea = "<textarea id='valText' onkeydown='onKey(event)' placeholder=\"Enter a description...\"></textarea>";
 		if(item.value)
@@ -117,7 +117,7 @@ function setRowContent(item, row)
 			valueTextArea="<textarea id='valText' onkeydown='onKey(event)'>"+item.value+"</textarea>";
 		}
 
-		innerHTML+="<tr><td class='content'>"+valueTextArea+"</td></tr></table>";
+		innerHTML+=valueTextArea;
 
 
 		var attachments = item.attachements;
@@ -171,7 +171,7 @@ function addItem(item, isNew){
 	}
 	else //if new row
 	{
-		row.innerHTML = "<td class='contentName'><textarea id='nameText' onkeydown='onKey(event)' placeholder=\"Enter a title for your favourites...\"></textarea></td><td class='contentDetails'><table border=\"0\"><tr border=\"0\"><td><textarea id='valText'  onkeydown='onKey(event)' placeholder=\"Enter a description...\"></textarea></td></tr></table>"+attachButton+"</td>" +
+		row.innerHTML = "<td class='contentName'><textarea id='nameText' onkeydown='onKey(event)' placeholder=\"Enter a title for your favourites...\"></textarea></td><td class='contentDetails'><textarea id='valText'  onkeydown='onKey(event)' placeholder=\"Enter a description...\"></textarea>"+attachButton+"</td>" +
 		    "<td class = 'contentAction'><span class='deleteBtn' onclick='deleteItem(this)' title='delete me'></span></td>";
 	}
 

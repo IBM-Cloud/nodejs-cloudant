@@ -172,3 +172,10 @@ tr:hover .deleteBtn {
 		padding: 10px;
 		font-size: .8rem;
 }
+.uploadBox {
+  margin: 0 auto;
+  text-align: center;
+}
+.appinfo {
+	padding: 10px;
+}
