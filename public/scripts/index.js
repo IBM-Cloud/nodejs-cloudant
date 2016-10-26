@@ -76,7 +76,7 @@ function uploadFile(node)
 		return;
 	}
 
-	var row = node.parentNode.parentNode;
+	var row = node.parentNode.parentNode.parentNode;
 
 	var form = new FormData();
 	form.append("file", file);
@@ -85,7 +85,7 @@ function uploadFile(node)
 
 	var queryParams = "id=" + (id==null?-1:id);
 	queryParams+= "&name="+row.firstChild.firstChild.value;
-	queryParams+="&value="+row.firstChild.nextSibling.firstChild.firstChild.firstChild.firstChild.firstChild.value;
+	queryParams+="&value="+row.firstChild.nextSibling.firstChild.value;
 
 
 	var table = row.firstChild.nextSibling.firstChild;
@@ -130,7 +130,6 @@ function setRowContent(item, row)
 				if(attachment.content_type.indexOf("image/")==0)
 				{
 					innerHTML+= "<div class='contentTiles'>"+attachment.key+"<br><img height=\"150\" src=\""+attachment.url+"\" onclick='window.open(\""+attachment.url+"\")'></img></div>" ;
-
 
 				} else if(attachment.content_type.indexOf("audio/")==0)
 				{
@@ -216,12 +215,12 @@ function onKey(evt){
 		{
 			row = evt.target.parentNode.parentNode;
 			nameV = evt.target.value;
-			valueV = row.firstChild.nextSibling.firstChild.firstChild.firstChild.firstChild.firstChild.value ;
+			valueV = row.firstChild.nextSibling.firstChild.value;
 
 		}
 		else
 		{
-			row = evt.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+			row = evt.target.parentNode.parentNode;
 			nameV = row.firstChild.firstChild.value;
 			valueV = evt.target.value;
 		}
