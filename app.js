@@ -60,9 +60,6 @@ function initDBConnection() {
                 dbCredentials.url = vcapServices[vcapService][0].credentials.url;
             }
         }
-        if (db == null) {
-            console.warn('Could not find Cloudant credentials in VCAP_SERVICES environment variable - data will be unavailable to the UI');
-        }
     } else { //When running locally, the VCAP_SERVICES will not be set
 
         // When running this app locally you can get your Cloudant credentials
