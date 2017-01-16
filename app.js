@@ -114,6 +114,9 @@ function createResponseData(id, name, value, attachments) {
     return responseData;
 }
 
+function sanitizeInput(str) {
+    return str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
 
 var saveDocument = function(id, name, value, response) {
 
@@ -174,8 +177,8 @@ app.post('/api/favorites/attach', multipartMiddleware, function(request, respons
             isExistingDoc = true;
         }
 
-        var name = request.query.name;
-        var value = request.query.value;
+        var name = sanitizeInput(request.query.name);
+        var value = sanitizeInput(request.query.value);
 
         var file = request.files.file;
         var newPath = './public/uploads/' + file.name;
@@ -272,8 +275,8 @@ app.post('/api/favorites', function(request, response) {
     console.log("Value: " + request.body.value);
 
     // var id = request.body.id;
-    var name = request.body.name;
-    var value = request.body.value;
+    var name = sanitizeInput(request.body.name);
+    var value = sanitizeInput(request.body.value);
 
     saveDocument(null, name, value, response);
 
@@ -311,8 +314,8 @@ app.put('/api/favorites', function(request, response) {
     console.log("Update Invoked..");
 
     var id = request.body.id;
-    var name = request.body.name;
-    var value = request.body.value;
+    var name = sanitizeInput(request.body.name);
+    var value = sanitizeInput(request.body.value);
 
     console.log("ID: " + id);
 
