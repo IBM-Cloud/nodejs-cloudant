@@ -96,8 +96,8 @@ function createResponseData(id, name, value, attachments) {
 
     var responseData = {
         id: id,
-        name: name,
-        value: value,
+        name: sanitizeInput(name),
+        value: sanitizeInput(value),
         attachements: []
     };
 
@@ -115,7 +115,7 @@ function createResponseData(id, name, value, attachments) {
 }
 
 function sanitizeInput(str) {
-    return str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return String(str).replace(/&(?!amp;|lt;|gt;)/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 var saveDocument = function(id, name, value, response) {
