@@ -1,0 +1,7 @@
+---
+applications:
+- name: sample-nodejs-cloudant
+  random-route: true
+  memory: 512M
+  services:
+  - sample-nodejs-cloudant-cloudantNoSQLDB
