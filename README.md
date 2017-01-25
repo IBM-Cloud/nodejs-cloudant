@@ -1,8 +1,16 @@
-# Node.js Cloudant Starter Overview
+# Node.js Cloudant Sample
 
-The Node.js Cloudant Starter demonstrates how to use the Bluemix Cloudant NoSQL DB service. The app displays persisted files and lets the user upload new files or delete old files.
+This application demonstrates how to use the Bluemix Cloudant NoSQL DB service.  It helps users organize their favorite files. The UI talks to a RESTful Express CRUD backend API.
 
-## Decomposition Instructions
+[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy)
 
-* See app.js for how to obtain and use the Cloudant credentials as well as the file CRUD API
-* See public/scripts/index.js and public/scripts/util.js for how the front-end calls the back-end API
+## Run the app locally
+
+1. [Install Node.js][]
++ cd into this project's root directory
++ Copy the value for the VCAP_SERVICES envirionment variable from the application running in Bluemix and paste it in a `vcap-local.json` file
++ Run `npm install` to install the app's dependencies
++ Run `npm start` to start the app
++ Access the running app in a browser at http://localhost:6001
+
+[Install Node.js]: https://nodejs.org/en/download/
