@@ -1,4 +1,8 @@
 ---
+declared-services: 
+  sample-nodejs-cloudant-cloudantNoSQLDB:
+    label: cloudantNoSQLDB 
+    plan: Lite 
 applications:
 - name: sample-nodejs-cloudant
   random-route: true
