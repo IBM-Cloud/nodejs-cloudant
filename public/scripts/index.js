@@ -6,6 +6,10 @@ var defaultItems = [
 
 ];
 
+function encodeUriAndQuotes(untrustedStr) {
+    return encodeURI(String(untrustedStr)).replace(/'/g, '%27').replace(')', '%29');
+}
+
 function loadItems() {
     xhrGet(REST_DATA, function(data) {
 
@@ -121,16 +125,16 @@ function setRowContent(item, row) {
             var attachment = attachments[i];
 
             if (attachment.content_type.indexOf("image/") == 0) {
-                innerHTML += "<div class='contentTiles'>" + attachment.key + "<br><img height=\"150\" src=\"" + attachment.url + "\" onclick='window.open(\"" + attachment.url + "\")'></img></div>";
+                innerHTML += "<div class='contentTiles'>" + attachment.key + "<br><img height=\"150\" src=\"" + encodeUriAndQuotes(attachment.url) + "\" onclick='window.open(\"" + encodeUriAndQuotes(attachment.url) + "\")'></img></div>";
 
             } else if (attachment.content_type.indexOf("audio/") == 0) {
-                innerHTML += "<div class='contentTiles'>" + attachment.key + "<br><AUDIO  height=\"50\" src=\"" + attachment.url + "\" controls></AUDIO></div>";
+                innerHTML += "<div class='contentTiles'>" + attachment.key + "<br><AUDIO  height=\"50\" src=\"" + encodeUriAndQuotes(attachment.url) + "\" controls></AUDIO></div>";
 
             } else if (attachment.content_type.indexOf("video/") == 0) {
-                innerHTML += "<div class='contentTiles'>" + attachment.key + "<br><VIDEO  height=\"150\" src=\"" + attachment.url + "\" controls></VIDEO></div>";
+                innerHTML += "<div class='contentTiles'>" + attachment.key + "<br><VIDEO  height=\"150\" src=\"" + encodeUriAndQuotes(attachment.url) + "\" controls></VIDEO></div>";
 
             } else if (attachment.content_type.indexOf("text/") == 0 || attachment.content_type.indexOf("application/") == 0) {
-                innerHTML += "<div class='contentTiles'><a href=\"" + attachment.url + "\" target=\"_blank\">" + attachment.key + "</a></div>";
+                innerHTML += "<div class='contentTiles'><a href=\"" + encodeUriAndQuotes(attachment.url) + "\" target=\"_blank\">" + attachment.key + "</a></div>";
             }
 
         }
