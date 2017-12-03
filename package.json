@@ -13,6 +13,7 @@
     "cloudant": "1.10.0",
     "body-parser": "1.18.2",
     "method-override": "2.3.10",
+    "lodash": "4.17.4",
     "log4js": "2.3.12",
     "errorhandler": "1.5.0",
     "connect-multiparty": "2.1.0"

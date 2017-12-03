@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const errorHandler = require('errorhandler');
 
-const routes = require('./routes');
+const routes = require('./routes/routes');
 
 const logger = log4js.getLogger('app');
 
@@ -31,7 +31,7 @@ if ('development' === app.get('env')) {
     app.use(errorHandler());
 }
 
-app.get('/', routes.index);
+app.use(routes);
 
 http.listen(port, function () {
     logger.info('Your server is listening on port %d', port);
