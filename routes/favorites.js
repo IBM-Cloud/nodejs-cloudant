@@ -2,31 +2,7 @@ const _ = require('lodash');
 const log4js = require('log4js');
 const logger = log4js.getLogger('favorites');
 
-const sanitizeInput = (str) => {
-    return String(str).replace(/&(?!amp;|lt;|gt;)/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-};
-
-const createResponseData = (id, name, value, attachments) => {
-
-    const responseData = {
-        id: id,
-        name: sanitizeInput(name),
-        value: sanitizeInput(value),
-        attachements: []
-    };
-
-
-    attachments.forEach((item) => {
-        const attachmentData = {
-            content_type: item.type,
-            key: item.key,
-            url: '/api/favorites/attach?id=' + id + '&key=' + item.key
-        };
-        responseData.attachements.push(attachmentData);
-
-    });
-    return responseData;
-};
+const util = require('./util.js');
 
 module.exports.getFavorites = (db) => {
     logger.debug('START getFavorites');
@@ -58,14 +34,14 @@ module.exports.getFavorites = (db) => {
                     }
                     logger.debug('%s: %j', attribute, doc._attachments.attribute);
                 }
-                responseData = createResponseData(
+                responseData = util.createResponseData(
                     doc._id,
                     doc.name,
                     doc.value,
                     attachments);
 
             } else {
-                responseData = createResponseData(
+                responseData = util.createResponseData(
                     doc._id,
                     doc.name,
                     doc.value, []);
@@ -82,8 +58,8 @@ module.exports.getFavorites = (db) => {
 module.exports.putFavorite = (db, id, name, value) => {
     logger.debug('START putFavorite');
 
-    const _name = sanitizeInput(name);
-    const _value = sanitizeInput(value);
+    const _name = util.sanitizeInput(name);
+    const _value = util.sanitizeInput(value);
 
     db.get(id, {
         revs_info: true
@@ -104,9 +80,12 @@ module.exports.putFavorite = (db, id, name, value) => {
 
 module.exports.createFavorite = (db, name, value) => {
     logger.debug('START createFavorite');
+    const _name = util.sanitizeInput(name);
+    const _value = util.sanitizeInput(value);
+
     db.insert({
-        name: name,
-        value: value
+        name: _name,
+        value: _value
     }).then((doc) => {
         logger.debug('Document created: %j', doc);
         return 200;
