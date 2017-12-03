@@ -1,22 +1,29 @@
 {
-  "name": "cloudant_boilerplate_nodejs",
-  "version": "0.0.2",
+  "name": "cloudant_nodejs",
+  "version": "0.0.3",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "pretest": "eslint . --format table",
+    "test": "NODE_ENV=test mocha test/test-*.js --timeout 600000"
   },
   "dependencies": {
-    "express": "4.15.x",
-    "ejs": "2.5.x",
-    "cloudant": "1.7.x",
-    "body-parser": "1.17.x",
-    "method-override": "2.3.x",
-    "morgan": "1.8.x",
-    "errorhandler": "1.5.x",
-    "connect-multiparty": "2.0.x"
+    "express": "4.16.2",
+    "ejs": "2.5.7",
+    "cloudant": "1.10.0",
+    "body-parser": "1.18.2",
+    "method-override": "2.3.10",
+    "log4js": "2.3.12",
+    "errorhandler": "1.5.0",
+    "connect-multiparty": "2.1.0"
   },
-  "repository": {},
+  "devDependencies": {
+    "eslint": "4.12.1",
+    "eslint-plugin-promise": "3.6.0"
+  },
+  "license": "SEE LICENSE IN LICENSE.txt",
   "engines": {
-    "node": "6.x"
+    "node": "6.1.0",
+    "npm": "3.8.6"
   }
 }
