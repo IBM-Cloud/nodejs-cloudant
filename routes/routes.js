@@ -18,33 +18,39 @@ router.get('/api/favorites', (req, res) => {
     res.status(200).json(docList).end();
 });
 
+router.post('/api/favorites', (req, res) => {
+    const name = req.body.name;
+    const value = req.body.value;
+    logger.info('Create a document with name %s and value %s', name, value);
+
+    const statusCode = favorites.createFavorite(db, name, value);
+    res.status(statusCode).end();
+});
+
+router.put('/api/favorites', (req, res) => {
+    const id = req.body.id;
+    const name = req.body.name;
+    const value = req.body.value;
+    logger.info('Update document %s', id);
+
+    const statusCode = favorites.putFavorite(db, id, name, value);
+    res.status(statusCode).end();
+});
+
+router.delete('/api/favorites', (req, res) => {
+
+    const id = req.query.id;
+    // var rev = request.query.rev; // Rev can be fetched from request. if
+    // needed, send the rev from client
+    logger.debug('Removing document of ID: %s', id);
+
+    const statusCode = favorites.deleteFavorite(db, id);
+    res.status(statusCode).end();
+});
+
 
 module.exports = router;
 
-
-let fileToUpload;
-
-const saveDocument = (id, name, value, response) => {
-
-    if (id === undefined) {
-        // Generated random id
-        id = '';
-    }
-
-    db.insert({
-        name: name,
-        value: value
-    }, id, (err, doc) => {
-        if (err) {
-            console.log(err);
-            response.sendStatus(500);
-        } else {
-            response.sendStatus(200);
-        }
-        response.end();
-    });
-
-};
 
 app.get('/api/favorites/attach', (request, response) => {
     const doc = request.query.id;
@@ -175,71 +181,3 @@ app.post('/api/favorites/attach', multipartMiddleware, (request, response) => {
 
 });
 
-app.post('/api/favorites', function(request, response) {
-
-    console.log('Create Invoked..');
-    console.log('Name: ' + request.body.name);
-    console.log('Value: ' + request.body.value);
-
-    // var id = request.body.id;
-    const name = sanitizeInput(request.body.name);
-    const value = sanitizeInput(request.body.value);
-
-    saveDocument(null, name, value, response);
-
-});
-
-app.delete('/api/favorites', function(request, response) {
-
-    console.log('Delete Invoked..');
-    const id = request.query.id;
-    // var rev = request.query.rev; // Rev can be fetched from request. if
-    // needed, send the rev from client
-    console.log('Removing document of ID: ' + id);
-    console.log('Request Query: ' + JSON.stringify(request.query));
-
-    db.get(id, {
-        revs_info: true
-    }, (err, doc) => {
-        if (!err) {
-            db.destroy(doc._id, doc._rev, (err, res) => {
-                // Handle response
-                if (err) {
-                    console.log(err);
-                    response.sendStatus(500);
-                } else {
-                    response.sendStatus(200);
-                }
-            });
-        }
-    });
-
-});
-
-app.put('/api/favorites', (request, response) => {
-
-    console.log('Update Invoked..');
-
-    const id = request.body.id;
-    const name = sanitizeInput(request.body.name);
-    const value = sanitizeInput(request.body.value);
-
-    console.log('ID: ' + id);
-
-    db.get(id, {
-        revs_info: true
-    }, (err, doc) => {
-        if (!err) {
-            console.log(doc);
-            doc.name = name;
-            doc.value = value;
-            db.insert(doc, doc.id, (err, doc) => {
-                if (err) {
-                    console.log('Error inserting data\n' + err);
-                    return 500;
-                }
-                return 200;
-            });
-        }
-    });
-});

@@ -29,6 +29,7 @@ const createResponseData = (id, name, value, attachments) => {
 };
 
 module.exports.getFavorites = (db) => {
+    logger.debug('START getFavorites');
 
     const docList = [];
 
@@ -78,3 +79,52 @@ module.exports.getFavorites = (db) => {
     });
 };
 
+module.exports.putFavorite = (db, id, name, value) => {
+    logger.debug('START putFavorite');
+
+    const _name = sanitizeInput(name);
+    const _value = sanitizeInput(value);
+
+    db.get(id, {
+        revs_info: true
+    }).then((doc) => {
+        logger.debug('Document with id %s: %j', id, doc);
+        doc.name = _name;
+        doc.value = _value;
+        return db.insert(doc, doc.id);
+    }).then((doc) => {
+        logger.debug('Document updated: %j', doc);
+        return 200;
+    }).catch((err) => {
+        logger.error(err);
+        return 500;
+    });
+
+};
+
+module.exports.createFavorite = (db, name, value) => {
+    logger.debug('START createFavorite');
+    db.insert({
+        name: name,
+        value: value
+    }).then((doc) => {
+        logger.debug('Document created: %j', doc);
+        return 200;
+    }).catch((err) => {
+        logger.error(err);
+        return 500;
+    });
+};
+
+module.exports.deleteFavorite = (db, id) => {
+    logger.debug('START deleteFavorite');
+    db.get(id, {
+        revs_info: true
+    }).then((res) => {
+        logger.debug('Delete response: %j', res);
+        return 200;
+    }).catch((err) => {
+        logger.error(err);
+        return 500;
+    });
+};
