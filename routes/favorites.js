@@ -80,37 +80,43 @@ module.exports.createFavorite = (db, name, value) => {
 };
 
 module.exports.putFavorite = (db, id, name, value) => {
-    logger.debug('START putFavorite');
 
-    const _name = util.sanitizeInput(name);
-    const _value = util.sanitizeInput(value);
+    return new Promise((resolve, reject) => {
+        logger.debug('START putFavorite');
 
-    db.get(id, {
-        revs_info: true
-    }).then((doc) => {
-        logger.debug('Document with id %s: %j', id, doc);
-        doc.name = _name;
-        doc.value = _value;
-        return db.insert(doc, doc.id);
-    }).then((doc) => {
-        logger.debug('Document updated: %j', doc);
-        return 200;
-    }).catch((err) => {
-        logger.error(err);
-        return 500;
+        const _name = util.sanitizeInput(name);
+        const _value = util.sanitizeInput(value);
+
+        db.get(id, {
+            revs_info: true
+        }).then((doc) => {
+            logger.debug('Document with id %s: %j', id, doc);
+            doc.name = _name;
+            doc.value = _value;
+            return db.insert(doc, doc.id);
+        }).then((doc) => {
+            logger.debug('Document updated: %j', doc);
+            return resolve();
+        }).catch((err) => {
+            logger.error(err);
+            return reject(err);
+        });
     });
 
 };
 
 module.exports.deleteFavorite = (db, id) => {
-    logger.debug('START deleteFavorite');
-    db.get(id, {
-        revs_info: true
-    }).then((res) => {
-        logger.debug('Delete response: %j', res);
-        return 200;
-    }).catch((err) => {
-        logger.error(err);
-        return 500;
+    return new Promise((resolve, reject) => {
+        logger.debug('START deleteFavorite');
+        db.get(id, {
+            revs_info: true
+        }).then((res) => {
+            logger.debug('Delete response: %j', res);
+            return resolve();
+        }).catch((err) => {
+            logger.error(err);
+            return reject(err);
+        });
     });
+
 };

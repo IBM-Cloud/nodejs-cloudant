@@ -23,7 +23,7 @@ router.get('/api/favorites', (req, res) => {
     favorites.getFavorites(db).then((docList) => {
         return res.status(200).json(docList).end();
     }).catch((err) => {
-        res.status(500).send(err).end();
+        return res.status(500).send(err).end();
     });
 
 });
@@ -46,8 +46,11 @@ router.put('/api/favorites', (req, res) => {
     const value = req.body.value;
     logger.info('Update document %s', id);
 
-    const statusCode = favorites.putFavorite(db, id, name, value);
-    res.status(statusCode).end();
+    favorites.putFavorite(db, id, name, value).then(() => {
+        return res.status(200).end();
+    }).catch((err) => {
+        return res.status(500).json(err).end();
+    });
 });
 
 router.delete('/api/favorites', (req, res) => {
@@ -57,8 +60,11 @@ router.delete('/api/favorites', (req, res) => {
     // needed, send the rev from client
     logger.debug('Removing document of ID: %s', id);
 
-    const statusCode = favorites.deleteFavorite(db, id);
-    res.status(statusCode).end();
+    favorites.deleteFavorite(db, id).then(() => {
+        return res.status(200).end();
+    }).catch((err) => {
+        return res.status(500).json(err).end();
+    });
 });
 
 
@@ -66,15 +72,16 @@ router.get('/api/favorites/attach', (req, res) => {
     const id = req.query.id;
     const key = req.query.key;
 
-    const attached = attachments.getAttachment(db, id, key);
-    if (attached instanceof Error) {
-        res.setHeader('Content-Type', 'text/plain');
-        res.status(500).send('Error: ' + attached).end();
-    } else {
+    attachments.getAttachment(db, id, key).then((body) => {
         res.setHeader('Content-Disposition', 'inline; filename=\'' + key + '\'');
-        res.status(200).send(attached).end();
-    }
-});
+        return res.status(200).send(body).end();
+    }).catch((err) => {
+        res.setHeader('Content-Type', 'text/plain');
+        return res.status(500).send('Error: ' + err).end();
+    });
+
+})
+;
 
 router.post('/api/favorites/attach', multipartMiddleware, (req, res) => {
 
