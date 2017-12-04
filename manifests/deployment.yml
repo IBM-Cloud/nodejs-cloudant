@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nodejs-cloudant
+spec:
+  replicas: 3 # default value for pod replicas
+  minReadySeconds: 5 # amount of time to wait before create a new pod during rolling update
+  strategy:
+    type: RollingUpdate # force to use RollingUpdate deployment strategy
+    rollingUpdate:
+      maxSurge: 1 # amount of pods that exceed the desired number
+      maxUnavailable: 1 # maximum number of pod that can be unavailable during rolling update
+  revisionHistoryLimit: 1 # number of old ReplicaSets to retain to allow rollback
+  template:
+    metadata:
+      name: nodejs-cloudant
+      labels:
+        app: nodejs-cloudant
+    spec:
+      containers:
+        - name: nodejs-cloudant
+          image: 'registry.ng.bluemix.net/gabriele/nodejs-cloudant:1.0'
+          imagePullPolicy: Always
+          env:
+            - name: VCAP_SERVICES
+              valueFrom:
+                secretKeyRef:
+                  name: services-secret
+                  key: VCAP_SERVICES
+      imagePullSecrets:
+        - name: bluemix-default-secret

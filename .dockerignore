@@ -1,0 +1,9 @@
+node_modules
+test
+scripts
+.eslintignore
+.eslintrc.yaml
+.gitignore
+.travis.yml
+README.md
+npm-debug.log
