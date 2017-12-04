@@ -3,7 +3,7 @@
     "out": {
       "type": "console",
       "layout": {
-        "type": "basic"
+        "type": "coloured"
       }
     }
   },

@@ -3,7 +3,13 @@ const multipartMiddleware = multipart();
 const log4js = require('log4js');
 const logger = log4js.getLogger('routes');
 
-const db = require('../db/db.js').initDBConnection();
+let db = null;
+require('../db/db.js').initDBConnection().then((_db) => {
+    db = _db;
+    return;
+});
+
+
 const favorites = require('./favorites.js');
 const attachments = require('./attachments.js');
 
@@ -14,8 +20,12 @@ router.get('/', (req, res) => {
 });
 
 router.get('/api/favorites', (req, res) => {
-    const docList = favorites.getFavorites(db);
-    res.status(200).json(docList).end();
+    favorites.getFavorites(db).then((docList) => {
+        return res.status(200).json(docList).end();
+    }).catch((err) => {
+        res.status(500).send(err).end();
+    });
+
 });
 
 router.post('/api/favorites', (req, res) => {
@@ -23,8 +33,11 @@ router.post('/api/favorites', (req, res) => {
     const value = req.body.value;
     logger.info('Create a document with name %s and value %s', name, value);
 
-    const statusCode = favorites.createFavorite(db, name, value);
-    res.status(statusCode).end();
+    favorites.createFavorite(db, name, value).then(() => {
+        return res.status(200).end();
+    }).catch((err) => {
+        return res.status(500).json(err).end();
+    });
 });
 
 router.put('/api/favorites', (req, res) => {
@@ -70,8 +83,13 @@ router.post('/api/favorites/attach', multipartMiddleware, (req, res) => {
     const value = req.query.value;
     const file = req.files.file;
 
-    const responseData = attachments.addAttachment(db, id, name, value, file);
-    res.status(200).send(responseData).end();
+    attachments.addAttachment(db, id, name, value, file).then((responseData) => {
+        res.status(200).json(responseData).end();
+    }).catch((err) => {
+        res.status(500).send(err).end();
+    });
+
+
 });
 
 

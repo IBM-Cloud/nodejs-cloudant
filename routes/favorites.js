@@ -5,53 +5,77 @@ const logger = log4js.getLogger('favorites');
 const util = require('./util.js');
 
 module.exports.getFavorites = (db) => {
-    logger.debug('START getFavorites');
 
-    const docList = [];
+    return new Promise((resolve, reject) => {
+        logger.debug('START getFavorites');
 
-    db.list().then((body) => {
-        logger.debug('total # of docs -> %d', body.rows.length);
-        const promises = [];
-        _.forEach(body.rows, (document) => {
-            promises.push(db.get(document.id, {
-                revs_info: true
-            }));
-        });
-        return Promise.all(promises);
-    }).then((responses) => {
-        _.forEach(responses, (doc) => {
-            let responseData;
+        const docList = [];
 
-            if (doc._attachments) {
-                const attachments = [];
-                for (const attribute in doc._attachments) {
+        db.list().then((body) => {
+            logger.debug('total # of docs -> %d', body.rows.length);
+            const promises = [];
+            _.forEach(body.rows, (document) => {
+                promises.push(db.get(document.id, {
+                    revs_info: true
+                }));
+            });
+            return Promise.all(promises);
+        }).then((responses) => {
+            _.forEach(responses, (doc) => {
+                let responseData;
 
-                    if (doc._attachments.attribute && doc._attachments.attribute.content_type) {
-                        attachments.push({
-                            'key': attribute,
-                            'type': doc._attachments.attribute.content_type
-                        });
+                if (doc._attachments) {
+                    const attachments = [];
+                    for (const attribute in doc._attachments) {
+
+                        if (doc._attachments.attribute && doc._attachments.attribute.content_type) {
+                            attachments.push({
+                                'key': attribute,
+                                'type': doc._attachments.attribute.content_type
+                            });
+                        }
+                        logger.debug('%s: %j', attribute, doc._attachments.attribute);
                     }
-                    logger.debug('%s: %j', attribute, doc._attachments.attribute);
+                    responseData = util.createResponseData(
+                        doc._id,
+                        doc.name,
+                        doc.value,
+                        attachments);
+
+                } else {
+                    responseData = util.createResponseData(
+                        doc._id,
+                        doc.name,
+                        doc.value, []);
                 }
-                responseData = util.createResponseData(
-                    doc._id,
-                    doc.name,
-                    doc.value,
-                    attachments);
 
-            } else {
-                responseData = util.createResponseData(
-                    doc._id,
-                    doc.name,
-                    doc.value, []);
-            }
-
-            docList.push(responseData);
+                docList.push(responseData);
+            });
+            return resolve(docList);
+        }).catch((err) => {
+            logger.error('Error in retrieving favorites: %s - %j', err.message, err.stack);
+            return reject(err);
         });
-        return docList;
-    }).catch((err) => {
-        logger.error(err);
+    });
+};
+
+module.exports.createFavorite = (db, name, value) => {
+
+    return new Promise((resolve, reject) => {
+        logger.debug('START createFavorite');
+        const _name = util.sanitizeInput(name);
+        const _value = util.sanitizeInput(value);
+
+        db.insert({
+            name: _name,
+            value: _value
+        }).then((doc) => {
+            logger.debug('Document created: %j', doc);
+            return resolve();
+        }).catch((err) => {
+            logger.error(err);
+            return reject(err);
+        });
     });
 };
 
@@ -76,23 +100,6 @@ module.exports.putFavorite = (db, id, name, value) => {
         return 500;
     });
 
-};
-
-module.exports.createFavorite = (db, name, value) => {
-    logger.debug('START createFavorite');
-    const _name = util.sanitizeInput(name);
-    const _value = util.sanitizeInput(value);
-
-    db.insert({
-        name: _name,
-        value: _value
-    }).then((doc) => {
-        logger.debug('Document created: %j', doc);
-        return 200;
-    }).catch((err) => {
-        logger.error(err);
-        return 500;
-    });
 };
 
 module.exports.deleteFavorite = (db, id) => {

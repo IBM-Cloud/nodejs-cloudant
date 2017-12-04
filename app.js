@@ -1,5 +1,6 @@
-const log4js = require('log4js');
 const path = require('path');
+const log4js = require('log4js');
+log4js.configure(path.join(process.cwd(), 'config', 'log4js.json'));
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);

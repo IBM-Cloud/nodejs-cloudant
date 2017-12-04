@@ -1,0 +1,21 @@
+{
+  "cloudant": [
+    {
+      "credentials": {
+        "username": "admin",
+        "password": "pass",
+        "host": "localhost",
+        "port": 8080,
+        "url": "http://admin:pass@localhost:8080"
+      },
+      "label": "cloudantnosql",
+      "name": "CloudantGab",
+      "plan": "standard",
+      "tags": [
+        "watson",
+        "ibm_created",
+        "ibm_dedicated_public"
+      ]
+    }
+  ]
+}

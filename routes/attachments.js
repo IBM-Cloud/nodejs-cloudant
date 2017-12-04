@@ -19,49 +19,55 @@ module.exports.getAttachment = (db, id, key) => {
 };
 
 module.exports.addAttachment = (db, id, name, value, file) => {
-    logger.debug('START addAttachment');
 
-    const _name = util.sanitizeInput(name);
-    const _value = util.sanitizeInput(value);
+    return new Promise((resolve, reject) => {
+        logger.debug('START addAttachment');
 
 
-    fs.readFile(file.path).then((data) => {
-        return Promise.all([data, db.get(id)]);
-    }).then(([data, doc]) => {
-        if (!doc) {
-            return Promise.all([data, db.create({
-                name: _name,
-                value: _value
-            }).then((doc) => {
-                return doc;
-            })]);
-        }
-        return [data, doc];
-    }).then(([data, doc]) => {
-        return db.attachment.insert(doc._id, file.name, data, file.type, {
-            rev: doc._rev
-        });
-    }).then((document) => {
-        logger.info('Attachment saved successfully.');
-        const attachements = [];
-        let attachData;
-        _.forEach(document._attachments, (attachment) => {
-            if (attachment === value) {
-                attachData = {
-                    'key': attachment,
-                    'type': file.type
-                };
-            } else {
-                attachData = {
-                    'key': attachment,
-                    'type': attachment.content_type
-                };
+        const _name = util.sanitizeInput(name);
+        const _value = util.sanitizeInput(value);
+
+
+        fs.readFile(file.path).then((data) => {
+            return Promise.all([data, (id === -1) ? db.get(id) : null]);
+        }).then(([data, doc]) => {
+            if (!doc) {
+                return Promise.all([data, db.insert({
+                    name: _name,
+                    value: _value
+                }).then((doc) => {
+                    return doc;
+                })]);
             }
-            attachements.push(attachData);
-        });
+            return [data, doc];
+        }).then(([data, doc]) => {
+            logger.debug('file name: %s, file type: %s', file.name, file.type);
+            return db.attachment.insert(doc._id, file.name, data, file.type, {
+                rev: doc._rev
+            });
+        }).then((document) => {
+            logger.info('Attachment saved successfully.');
+            const attachements = [];
+            let attachData;
+            _.forEach(document._attachments, (attachment) => {
+                if (attachment === value) {
+                    attachData = {
+                        'key': attachment,
+                        'type': file.type
+                    };
+                } else {
+                    attachData = {
+                        'key': attachment,
+                        'type': attachment.content_type
+                    };
+                }
+                attachements.push(attachData);
+            });
 
-        return util.createResponseData(id, name, value, attachements);
-    }).catch((err) => {
-        logger.error(err);
+            return resolve(util.createResponseData(id, name, value, attachements));
+        }).catch((err) => {
+            logger.error('Error: ', err);
+            return reject(err);
+        });
     });
 };
