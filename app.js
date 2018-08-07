@@ -51,3 +51,5 @@ app.use(routes);
 http.listen(port, function () {
     logger.info('Your server is listening on port %d', port);
 });
+
+module.exports = app;
