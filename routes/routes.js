@@ -91,9 +91,9 @@ router.post('/api/favorites/attach', multipartMiddleware, (req, res) => {
     const file = req.files.file;
 
     attachments.addAttachment(db, id, name, value, file).then((responseData) => {
-        res.status(200).json(responseData).end();
+        return res.status(200).json(responseData).end();
     }).catch((err) => {
-        res.status(500).send(err).end();
+        return res.status(500).send(err).end();
     });
 
 
