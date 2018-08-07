@@ -1,4 +1,4 @@
-const Cloudant = require('cloudant');
+const Cloudant = require('@cloudant/cloudant');
 const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');

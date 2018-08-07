@@ -1,4 +1,18 @@
+const nconf = require('nconf');
 const path = require('path');
+
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
+    nconf.file({
+        file: path.join(process.cwd(), 'config', 'configuration-local.yaml'),
+        format: require('nconf-yaml')
+    });
+
+} else {
+    nconf.file({
+        file: path.join(process.cwd(), 'configuration', 'configuration.yaml'),
+        format: require('nconf-yaml')
+    });
+}
 const log4js = require('log4js');
 log4js.configure(path.join(process.cwd(), 'config', 'log4js.json'));
 const express = require('express');

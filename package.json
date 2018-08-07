@@ -1,6 +1,6 @@
 {
   "name": "cloudant_nodejs",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "start": "node app.js",
@@ -8,16 +8,18 @@
     "test": "NODE_ENV=test mocha test/test-*.js"
   },
   "dependencies": {
-    "body-parser": "1.18.2",
-    "cloudant": "1.10.0",
-    "connect-multiparty": "2.1.0",
-    "express": "4.16.2",
+    "body-parser": "1.18.3",
+    "@cloudant/cloudant": "2.3.0",
+    "connect-multiparty": "2.1.1",
+    "express": "4.16.3",
     "errorhandler": "1.5.0",
-    "ejs": "2.5.7",
-    "lodash": "4.17.4",
-    "log4js": "2.3.12",
-    "method-override": "2.3.10",
-    "promisify-node": "0.4.0"
+    "ejs": "2.6.1",
+    "lodash": "4.17.10",
+    "log4js": "3.0.4",
+    "method-override": "3.0.0",
+    "nconf": "0.10.0",
+    "nconf-yaml": "1.0.2",
+    "promisify-node": "0.5.0"
   },
   "devDependencies": {
     "eslint": "4.12.1",
@@ -25,7 +27,7 @@
   },
   "license": "SEE LICENSE IN LICENSE.txt",
   "engines": {
-    "node": "6.1.0",
-    "npm": "3.8.6"
+    "node": "6.14.3",
+    "npm": "3.10.10"
   }
 }
