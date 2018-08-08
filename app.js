@@ -13,6 +13,8 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
         format: require('nconf-yaml')
     });
 }
+
+
 const log4js = require('log4js');
 log4js.configure(path.join(process.cwd(), 'config', 'log4js.json'));
 const express = require('express');
@@ -23,7 +25,7 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const errorHandler = require('errorhandler');
 
-const routes = require('./routes/routes');
+const routes = require('./routes/routes')(nconf);
 
 const logger = log4js.getLogger('app');
 
