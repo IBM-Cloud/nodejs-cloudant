@@ -15,22 +15,20 @@ module.exports = (nconf) => {
     const favorites = require('./favorites.js');
     const attachments = require('./attachments.js');
 
-    const router = require('express').Router();
-
-    router.get('/', (req, res) => {
+    const serveIndex = (req, res) => {
         res.render('index.html', {title: 'Cloudant Boiler Plate'});
-    });
+    };
 
-    router.get('/api/favorites', (req, res) => {
+    const getFavorites = (req, res) => {
         favorites.getFavorites(db).then((docList) => {
             return res.status(200).json(docList).end();
         }).catch((err) => {
             return res.status(500).send(err).end();
         });
 
-    });
+    };
 
-    router.post('/api/favorites', (req, res) => {
+    const postFavorites = (req, res) => {
         const name = req.body.name;
         const value = req.body.value;
         logger.info('Create a document with name %s and value %s', name, value);
@@ -40,9 +38,9 @@ module.exports = (nconf) => {
         }).catch((err) => {
             return res.status(500).json(err).end();
         });
-    });
+    };
 
-    router.put('/api/favorites', (req, res) => {
+    const putFavorites = (req, res) => {
         const id = req.body.id;
         const name = req.body.name;
         const value = req.body.value;
@@ -53,9 +51,9 @@ module.exports = (nconf) => {
         }).catch((err) => {
             return res.status(500).json(err).end();
         });
-    });
+    };
 
-    router.delete('/api/favorites', (req, res) => {
+    const deleteFavorites = (req, res) => {
 
         const id = req.query.id;
         // var rev = request.query.rev; // Rev can be fetched from request. if
@@ -67,10 +65,9 @@ module.exports = (nconf) => {
         }).catch((err) => {
             return res.status(500).json(err).end();
         });
-    });
+    };
 
-
-    router.get('/api/favorites/attach', (req, res) => {
+    const getAttachments = (req, res) => {
         const id = req.query.id;
         const key = req.query.key;
 
@@ -82,10 +79,9 @@ module.exports = (nconf) => {
             return res.status(500).send('Error: ' + err).end();
         });
 
-    })
-    ;
+    };
 
-    router.post('/api/favorites/attach', multipartMiddleware, (req, res) => {
+    const postAttachments = (req, res) => {
 
         const id = req.query.id;
         const name = req.query.name;
@@ -99,7 +95,22 @@ module.exports = (nconf) => {
         });
 
 
-    });
+    };
 
-    return router;
+    while (!db) {
+
+        const router = require('express').Router();
+
+        router.get('/', serveIndex);
+
+        router.get('/api/favorites', getFavorites);
+        router.post('/api/favorites', postFavorites);
+        router.put('/api/favorites', putFavorites);
+        router.delete('/api/favorites', deleteFavorites);
+
+        router.get('/api/favorites/attach', getAttachments);
+        router.post('/api/favorites/attach', multipartMiddleware, postAttachments);
+
+        return router;
+    }
 };
