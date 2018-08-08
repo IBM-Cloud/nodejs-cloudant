@@ -13,6 +13,7 @@ module.exports = (nconf) => {
     logger.info('Connecting to database %s...', dbName);
     const cloudant = Cloudant({url: dbURL, plugins: 'promises'});
     const db = cloudant.db.use(dbName);
+    logger.info('Connected to database %s', dbName);
 
     const favorites = require('./favorites.js');
     const attachments = require('./attachments.js');
@@ -99,20 +100,18 @@ module.exports = (nconf) => {
 
     };
 
-    while (!db) {
 
-        const router = require('express').Router();
+    const router = require('express').Router();
 
-        router.get('/', serveIndex);
+    router.get('/', serveIndex);
 
-        router.get('/api/favorites', getFavorites);
-        router.post('/api/favorites', postFavorites);
-        router.put('/api/favorites', putFavorites);
-        router.delete('/api/favorites', deleteFavorites);
+    router.get('/api/favorites', getFavorites);
+    router.post('/api/favorites', postFavorites);
+    router.put('/api/favorites', putFavorites);
+    router.delete('/api/favorites', deleteFavorites);
 
-        router.get('/api/favorites/attach', getAttachments);
-        router.post('/api/favorites/attach', multipartMiddleware, postAttachments);
+    router.get('/api/favorites/attach', getAttachments);
+    router.post('/api/favorites/attach', multipartMiddleware, postAttachments);
 
-        return router;
-    }
+    return router;
 };
