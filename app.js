@@ -13,6 +13,8 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
     });
 }
 
+require('./db/db.js').getInstance(nconf);
+
 process.on('unhandledRejection', error => {
     // Will print "unhandledRejection err is not defined"
     logger.error('unhandledRejection: %j', error);

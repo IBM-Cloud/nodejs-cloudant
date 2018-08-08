@@ -3,17 +3,7 @@ const multipartMiddleware = multipart();
 const log4js = require('log4js');
 const logger = log4js.getLogger('routes');
 
-module.exports = (nconf) => {
-
-    const dbName = nconf.get('cloudant').database_name;
-    const dbURL = nconf.get('cloudant').credentials.url;
-
-    const Cloudant = require('@cloudant/cloudant');
-
-    logger.info('Connecting to database %s...', dbName);
-    const cloudant = Cloudant({url: dbURL, plugins: 'promises'});
-    const db = cloudant.db.use(dbName);
-    logger.info('Connected to database %s', dbName);
+module.exports = () => {
 
     const favorites = require('./favorites.js');
     const attachments = require('./attachments.js');
@@ -23,7 +13,7 @@ module.exports = (nconf) => {
     };
 
     const getFavorites = (req, res) => {
-        favorites.getFavorites(db).then((docList) => {
+        favorites.getFavorites().then((docList) => {
             return res.status(200).json(docList).end();
         }).catch((err) => {
             return res.status(500).send(err).end();
@@ -36,8 +26,8 @@ module.exports = (nconf) => {
         const value = req.body.value;
         logger.info('Create a document with name %s and value %s', name, value);
 
-        favorites.createFavorite(db, name, value).then(() => {
-            return res.status(200).end();
+        favorites.createFavorite(name, value).then(() => {
+            return res.status(201).end();
         }).catch((err) => {
             return res.status(500).json(err).end();
         });
@@ -49,14 +39,14 @@ module.exports = (nconf) => {
         const value = req.body.value;
         logger.info('Update document %s', id);
 
-        favorites.putFavorite(db, id, name, value).then(() => {
+        favorites.putFavorite(id, name, value).then(() => {
             return res.status(200).end();
         }).catch((err) => {
             return res.status(500).json(err).end();
         });
     };
 
-    const deleteFavorites = (req, res) => {
+    /* const deleteFavorites = (req, res) => {
 
         const id = req.query.id;
         // var rev = request.query.rev; // Rev can be fetched from request. if
@@ -98,7 +88,7 @@ module.exports = (nconf) => {
         });
 
 
-    };
+    };*/
 
 
     const router = require('express').Router();
@@ -108,10 +98,10 @@ module.exports = (nconf) => {
     router.get('/api/favorites', getFavorites);
     router.post('/api/favorites', postFavorites);
     router.put('/api/favorites', putFavorites);
-    router.delete('/api/favorites', deleteFavorites);
+    /* router.delete('/api/favorites', deleteFavorites);
 
     router.get('/api/favorites/attach', getAttachments);
-    router.post('/api/favorites/attach', multipartMiddleware, postAttachments);
+    router.post('/api/favorites/attach', multipartMiddleware, postAttachments); */
 
     return router;
 };

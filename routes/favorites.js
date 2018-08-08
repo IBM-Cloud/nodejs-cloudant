@@ -4,18 +4,20 @@ const logger = log4js.getLogger('favorites');
 
 const util = require('./util.js');
 
-module.exports.getFavorites = (db) => {
+const db = require('../db/db.js').getInstance();
+
+module.exports.getFavorites = () => {
 
     return new Promise((resolve, reject) => {
         logger.debug('START getFavorites');
 
         const docList = [];
 
-        db.list().then((body) => {
+        db.getAllDocs().then((body) => {
             logger.debug('total # of docs -> %d', body.rows.length);
             const promises = [];
             _.forEach(body.rows, (document) => {
-                promises.push(db.get(document.id, {
+                promises.push(db.getDoc(document.id, {
                     revs_info: true
                 }));
             });
@@ -59,14 +61,14 @@ module.exports.getFavorites = (db) => {
     });
 };
 
-module.exports.createFavorite = (db, name, value) => {
+module.exports.createFavorite = (name, value) => {
 
     return new Promise((resolve, reject) => {
         logger.debug('START createFavorite');
         const _name = util.sanitizeInput(name);
         const _value = util.sanitizeInput(value);
 
-        db.insert({
+        db.createDoc({
             name: _name,
             value: _value
         }).then((doc) => {
@@ -79,7 +81,7 @@ module.exports.createFavorite = (db, name, value) => {
     });
 };
 
-module.exports.putFavorite = (db, id, name, value) => {
+module.exports.putFavorite = (id, name, value) => {
 
     return new Promise((resolve, reject) => {
         logger.debug('START putFavorite');
@@ -87,13 +89,13 @@ module.exports.putFavorite = (db, id, name, value) => {
         const _name = util.sanitizeInput(name);
         const _value = util.sanitizeInput(value);
 
-        db.get(id, {
+        db.getDoc(id, {
             revs_info: true
         }).then((doc) => {
             logger.debug('Document with id %s: %j', id, doc);
             doc.name = _name;
             doc.value = _value;
-            return db.insert(doc, doc.id);
+            return db.updateDoc(doc, doc.id);
         }).then((doc) => {
             logger.debug('Document updated: %j', doc);
             return resolve();
