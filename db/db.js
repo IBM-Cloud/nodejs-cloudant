@@ -28,13 +28,27 @@ class DatabaseHelper {
         return this._db.insert(doc, id);
     }
 
+    deleteDoc(id, rev) {
+        return this._db.destroy(id, rev);
+    }
+
+    addAttachment(id, fileName, data, fileType, options) {
+        return this._db.attachment(id, fileName, data, fileType, options);
+    }
+
+    getAttachment(id, key) {
+        return this._db.attachment.get(id, key);
+    }
 }
 
 let databaseHelper = null;
 
-module.exports.getInstance = (nconf) => {
+module.exports.getInstance = () => {
+    return databaseHelper;
+};
+
+module.exports.init = (nconf) => {
     if (!databaseHelper) {
         databaseHelper = new DatabaseHelper(nconf);
     }
-    return databaseHelper;
 };

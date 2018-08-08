@@ -23,6 +23,7 @@ module.exports.getFavorites = () => {
             });
             return Promise.all(promises);
         }).then((responses) => {
+            logger.trace('Documents retrieved: %j', responses);
             _.forEach(responses, (doc) => {
                 let responseData;
 
@@ -73,7 +74,7 @@ module.exports.createFavorite = (name, value) => {
             value: _value
         }).then((doc) => {
             logger.debug('Document created: %j', doc);
-            return resolve();
+            return resolve(doc);
         }).catch((err) => {
             logger.error(err);
             return reject(err);
@@ -92,7 +93,7 @@ module.exports.putFavorite = (id, name, value) => {
         db.getDoc(id, {
             revs_info: true
         }).then((doc) => {
-            logger.debug('Document with id %s: %j', id, doc);
+            logger.trace('Document with id %s: %j', id, doc);
             doc.name = _name;
             doc.value = _value;
             return db.updateDoc(doc, doc.id);
@@ -107,11 +108,14 @@ module.exports.putFavorite = (id, name, value) => {
 
 };
 
-module.exports.deleteFavorite = (db, id) => {
+module.exports.deleteFavorite = (id) => {
     return new Promise((resolve, reject) => {
         logger.debug('START deleteFavorite');
-        db.get(id, {
+        db.getDoc(id, {
             revs_info: true
+        }).then((doc) => {
+            logger.trace('Document with id %s: %j', id, doc);
+            return db.deleteDoc(id, doc._rev);
         }).then((res) => {
             logger.debug('Delete response: %j', res);
             return resolve();

@@ -8,7 +8,7 @@ module.exports.createResponseData = (id, name, value, attachments) => {
         id: id,
         name: module.exports.sanitizeInput(name),
         value: module.exports.sanitizeInput(value),
-        attachements: []
+        attachments: []
     };
 
 
@@ -18,7 +18,7 @@ module.exports.createResponseData = (id, name, value, attachments) => {
             key: item.key,
             url: '/api/favorites/attach?id=' + id + '&key=' + item.key
         };
-        responseData.attachements.push(attachmentData);
+        responseData.attachments.push(attachmentData);
 
     });
     return responseData;

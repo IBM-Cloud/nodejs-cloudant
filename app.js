@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
     });
 }
 
-require('./db/db.js').getInstance(nconf);
+require('./db/db.js').init(nconf);
 
 process.on('unhandledRejection', error => {
     // Will print "unhandledRejection err is not defined"
@@ -29,7 +29,7 @@ const http = require('http').Server(app);
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 
-const routes = require('./routes/routes')(nconf);
+const routes = require('./routes/routes');
 
 const logger = log4js.getLogger('app');
 

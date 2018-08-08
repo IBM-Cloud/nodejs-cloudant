@@ -6,11 +6,13 @@ const logger = log4js.getLogger('attachments');
 
 const util = require('./util.js');
 
-module.exports.getAttachment = (db, id, key) => {
+const db = require('../db/db.js').getInstance();
+
+module.exports.getAttachment = (id, key) => {
     return new Promise((resolve, reject) => {
         logger.debug('START getFavorites');
 
-        db.attachment.get(id, key).then((body) => {
+        db.getAttachment(id, key).then((body) => {
             logger.debug('Response: %j', body);
             return resolve(body);
         }).catch((err) => {
@@ -20,7 +22,7 @@ module.exports.getAttachment = (db, id, key) => {
     });
 };
 
-module.exports.addAttachment = (db, id, name, value, file) => {
+module.exports.addAttachment = (id, name, value, file) => {
 
     return new Promise((resolve, reject) => {
         logger.debug('START addAttachment');
@@ -34,7 +36,7 @@ module.exports.addAttachment = (db, id, name, value, file) => {
             return Promise.all([data, (id === -1) ? db.get(id) : null]);
         }).then(([data, doc]) => {
             if (!doc) {
-                return Promise.all([data, db.insert({
+                return Promise.all([data, db.createDoc({
                     name: _name,
                     value: _value
                 }).then((doc) => {
@@ -45,7 +47,7 @@ module.exports.addAttachment = (db, id, name, value, file) => {
         }).then(([data, doc]) => {
             logger.debug('file name: %s, file type: %s', file.name, file.type);
             logger.debug('DOC: %j', doc);
-            return db.attachment.insert(doc.id, file.name, data, file.type, {
+            return db.addAttachment(doc.id, file.name, data, file.type, {
                 rev: doc.rev
             });
         }).then((document) => {
