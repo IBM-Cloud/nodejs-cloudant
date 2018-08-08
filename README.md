@@ -1,5 +1,4 @@
 # Node.js Cloudant Sample
-[![Build Status](https://travis-ci.org/gabriele-decapoa/nodejs-cloudant.svg?branch=master)](https://travis-ci.org/gabriele-decapoa/nodejs-cloudant)
 
 This application demonstrates how to use the Bluemix Cloudant NoSQL DB service.  
 
