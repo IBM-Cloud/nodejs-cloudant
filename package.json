@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node app.js",
     "pretest": "eslint . --format table",
-    "test": "NODE_ENV=test mocha tests/*.js"
+    "test": "NODE_ENV=test mocha test/*.js"
   },
   "dependencies": {
     "body-parser": "1.18.3",

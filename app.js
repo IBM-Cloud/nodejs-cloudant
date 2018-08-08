@@ -6,7 +6,6 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
         file: path.join(process.cwd(), 'config', 'configuration-local.yaml'),
         format: require('nconf-yaml')
     });
-
 } else {
     nconf.file({
         file: path.join(process.cwd(), 'configuration', 'configuration.yaml'),
@@ -14,6 +13,10 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
     });
 }
 
+process.on('unhandledRejection', error => {
+    // Will print "unhandledRejection err is not defined"
+    logger.error('unhandledRejection: %j', error);
+});
 
 const log4js = require('log4js');
 log4js.configure(path.join(process.cwd(), 'config', 'log4js.json'));
@@ -23,7 +26,6 @@ const http = require('http').Server(app);
 
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
-const errorHandler = require('errorhandler');
 
 const routes = require('./routes/routes')(nconf);
 
@@ -42,11 +44,6 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/style', express.static(path.join(__dirname, '/views/style')));
-
-// development only
-if ('development' === app.get('env')) {
-    app.use(errorHandler());
-}
 
 app.use(routes);
 

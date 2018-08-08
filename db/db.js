@@ -8,15 +8,12 @@ module.exports.initDBConnection = (nconf) => {
 
     return new Promise((resolve, reject) => {
         logger.info('Initialization of database...');
-        const dbName = nconf.get('cloudant.database_name');
-        const dbCredentials = {
-            dbName: dbName,
-            url: nconf.get('cloudant.credentials.url')
-        };
+        const dbName = nconf.get('cloudant').database_name;
+        const dbURL = nconf.get('cloudant').credentials.url;
 
 
         logger.info('Connecting to database %s...', dbName);
-        const cloudant = Cloudant({url: dbCredentials.url, plugin: 'promises'});
+        const cloudant = Cloudant({url: dbURL, plugins: 'promises'});
 
         // check if DB exists if not create
         cloudant.db.list().then((allDbs) => {
