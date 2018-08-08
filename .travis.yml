@@ -11,6 +11,6 @@ env:
     - NODE_ENV=test
 before_script:
   - "docker run -d --name cloudant -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=pass -p 8080:5984 couchdb:latest"
-  - "curl -s -X 'PUT' http://admin:pass@localhost:8080/_users"
   - "sleep 30"
+  - "curl -s -X 'PUT' http://admin:pass@localhost:8080/_users"
   - "curl -s -X 'PUT' http://admin:pass@localhost:8080/my_sample_db"
