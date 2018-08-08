@@ -14,3 +14,4 @@ before_script:
   - "docker exec -ti cloudant cast license --silent"
   - "docker exec cloudant cast database init -v -y -p pass"
   - "sleep 30"
+  - "curl -s -X 'PUT' http://localhost:8080/my_sample_db"

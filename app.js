@@ -36,7 +36,7 @@ const port = process.env.PORT || 3000;
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
-app.use(log4js.connectLogger(logger, { level: 'auto' }));
+app.use(log4js.connectLogger(logger, {level: 'auto'}));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
