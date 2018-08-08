@@ -5,12 +5,14 @@ const logger = log4js.getLogger('routes');
 
 module.exports = (nconf) => {
 
-    let db = null;
-    require('../db/db.js').initDBConnection(nconf).then((_db) => {
-        db = _db;
-        return;
-    });
+    const dbName = nconf.get('cloudant').database_name;
+    const dbURL = nconf.get('cloudant').credentials.url;
 
+    const Cloudant = require('@cloudant/cloudant');
+
+    logger.info('Connecting to database %s...', dbName);
+    const cloudant = Cloudant({url: dbURL, plugins: 'promises'});
+    const db = cloudant.db.use(dbName);
 
     const favorites = require('./favorites.js');
     const attachments = require('./attachments.js');
