@@ -13,3 +13,4 @@ before_script:
   - "docker run -d --privileged --volume cloudant:/srv --name cloudant --hostname cloudant.dev -p 8080:80 ibmcom/cloudant-developer:latest"
   - "docker exec -ti cloudant cast license --silent"
   - "docker exec cloudant cast database init -v -y -p pass"
+  - "sleep 30"
