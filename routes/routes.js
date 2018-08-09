@@ -72,11 +72,10 @@ const getAttachments = (req, res) => {
 };
 
 const postAttachments = (req, res) => {
-
     const id = req.query.id;
     const name = req.query.name;
     const value = req.query.value;
-    const file = req.files.file;
+    const file = req.files.files;
 
     attachments.addAttachment(id, name, value, file).then((responseData) => {
         return res.status(200).json(responseData).end();

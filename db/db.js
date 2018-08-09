@@ -33,7 +33,7 @@ class DatabaseHelper {
     }
 
     addAttachment(id, fileName, data, fileType, options) {
-        return this._db.attachment(id, fileName, data, fileType, options);
+        return this._db.attachment.insert(id, fileName, data, fileType, options);
     }
 
     getAttachment(id, key) {
