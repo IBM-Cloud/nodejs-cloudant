@@ -6,7 +6,7 @@ const server = supertest.agent(require('../app.js'));
 const testUtility = require('./utils/utility.js');
 const documents = require('./utils/documents.js');
 
-describe.only('ATTACHMENTS APIs', function () {
+describe('ATTACHMENTS APIs', function () {
 
     afterEach('after each test', function (done) {
         testUtility.deleteAllFromCloudant().then(() => {
