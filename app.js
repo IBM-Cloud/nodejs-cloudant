@@ -1,16 +1,10 @@
-const nconf = require('nconf');
 const path = require('path');
+const nconf = require('nconf');
 
 if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
-    nconf.file({
-        file: path.join(process.cwd(), 'config', 'configuration-local.yaml'),
-        format: require('nconf-yaml')
-    });
+    nconf.file(path.join(process.cwd(), 'config', 'configuration-local.json'));
 } else {
-    nconf.file({
-        file: path.join(process.cwd(), 'configuration', 'configuration.yaml'),
-        format: require('nconf-yaml')
-    });
+    nconf.file(path.join(process.cwd(), 'configuration', 'configuration.json'));
 }
 
 require('./db/db.js').init(nconf);

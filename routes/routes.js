@@ -7,6 +7,9 @@ const router = require('express').Router();
 const favorites = require('./favorites.js');
 const attachments = require('./attachments.js');
 
+const health = require('@cloudnative/health-connect');
+let healthcheck = new health.HealthChecker();
+
 const serveIndex = (req, res) => {
     res.render('index.html', {title: 'Cloudant Boiler Plate'});
 };
@@ -86,6 +89,30 @@ const postAttachments = (req, res) => {
 
 };
 
+const livePromise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        logger.trace('ALIVE!');
+        return resolve();
+    }, 10);
+});
+
+const readyPromise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        logger.trace('READY!');
+        return resolve();
+    }, 10);
+});
+
+const shutdownPromise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        logger.trace('DONE!');
+        return resolve();
+    }, 10);
+});
+
+healthcheck.registerReadinessCheck(new health.ReadinessCheck('readyCheck', readyPromise));
+healthcheck.registerLivenessCheck(new health.LivenessCheck('liveCheck', livePromise));
+healthcheck.registerShutdownCheck(new health.ShutdownCheck('shutdownCheck', shutdownPromise));
 
 router.get('/', serveIndex);
 
@@ -96,6 +123,9 @@ router.delete('/api/favorites', deleteFavorites);
 
 router.get('/api/favorites/attach', getAttachments);
 router.post('/api/favorites/attach', multipartMiddleware, postAttachments);
+
+router.get('/health', health.LivenessEndpoint(healthcheck));
+router.get('/ready', health.ReadinessEndpoint(healthcheck));
 
 
 module.exports = router;
