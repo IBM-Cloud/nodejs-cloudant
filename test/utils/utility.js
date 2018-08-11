@@ -2,10 +2,7 @@ const path = require('path');
 const nconf = require('nconf');
 const Cloudant = require('@cloudant/cloudant');
 
-nconf.file({
-    file: path.join(process.cwd(), 'config', 'configuration-local.yaml'),
-    format: require('nconf-yaml')
-});
+nconf.file(path.join(process.cwd(), 'config', 'configuration-local.json'));
 
 const dbURL = nconf.get('cloudant').credentials.url;
 const dbName = nconf.get('cloudant').database_name;
