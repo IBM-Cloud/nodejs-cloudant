@@ -4,13 +4,13 @@ const nconf = require('nconf');
 if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
     nconf.file(path.join(process.cwd(), 'config', 'configuration-local.json'));
 } else {
-    nconf.file(path.join(process.cwd(), 'configuration', 'configuration.json'));
+    nconf.file(path.join(process.cwd(), 'config', 'configuration.json'));
 }
 
 require('./db/db.js').init(nconf);
 
 const log4js = require('log4js');
-log4js.configure(path.join(process.cwd(), 'config', 'log4js.json'));
+log4js.configure(nconf.get('log4js'));
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
