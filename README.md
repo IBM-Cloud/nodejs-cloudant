@@ -24,4 +24,9 @@ The UI, written in HTML and jQuery, interacts to a RESTful Express CRUD backend 
 
 For each changes you'll perform, run `npm test` and eventually add more test cases.
 
+## How to deploy on IBM Cloud Kubernetes cluster
+To build a new Docker image and deploy the application on IBM Cloud Kubernetes cluster, you have to issue the following command:
+```bash
+sh ./scripts/build-and-deploy-all.sh
+```
 
