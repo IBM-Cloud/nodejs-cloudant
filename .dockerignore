@@ -1,6 +1,5 @@
 node_modules
 test
-scripts
 .eslintignore
 .eslintrc.yaml
 .gitignore

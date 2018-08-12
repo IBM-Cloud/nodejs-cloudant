@@ -1,0 +1,24 @@
+{
+  "cloudant": {
+    "credentials": {
+      "url": "http://admin:pass@localhost:8080"
+    },
+    "database_name": "my_sample_db"
+  },
+  "log4js": {
+    "appenders": {
+      "out": {
+        "type": "console",
+        "layout": {
+          "type": "coloured"
+        }
+      }
+    },
+    "categories": {
+      "default": {
+        "appenders": ["out"],
+        "level": "debug"
+      }
+    }
+  }
+}
