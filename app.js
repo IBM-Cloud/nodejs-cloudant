@@ -6,7 +6,7 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
     nconf.add('user', {type: 'file', file: path.join(process.cwd(), 'config', 'configuration-local.json')});
 } else {
     const config = require(path.join(process.cwd(), 'config', 'configuration.json'));
-    const secretConfig = require(path.join(process.cwd(), 'config', 'secret.json'));
+    const secretConfig = require(path.join(process.cwd(), 'secretConfig', 'secret.json'));
     nconf.add('user', {type: 'literal', store: _.merge(config, secretConfig)});
 }
 

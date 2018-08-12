@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nodejs-cloudant-configmap
+data:
+  configuration.json: |-
+    {
+      "cloudant": {
+        "credentials": {
+          "url": "none"
+        },
+        "database_name": "my_sample_db"
+      },
+      "log4js": {
+        "appenders": {
+          "out": {
+            "type": "console",
+            "layout": {
+              "type": "coloured"
+            }
+          }
+        },
+        "categories": {
+          "default": {
+            "appenders": ["out"],
+            "level": "debug"
+          }
+        }
+      }
+    }
