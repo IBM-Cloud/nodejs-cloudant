@@ -1,10 +1,13 @@
 const path = require('path');
 const nconf = require('nconf');
+const _ = require('lodash');
 
 if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
-    nconf.file(path.join(process.cwd(), 'config', 'configuration-local.json'));
+    nconf.add('user', {type: 'file', file: path.join(process.cwd(), 'config', 'configuration-local.json')});
 } else {
-    nconf.file(path.join(process.cwd(), 'config', 'configuration.json'));
+    const config = require(path.join(process.cwd(), 'config', 'configuration.json'));
+    const secretConfig = require(path.join(process.cwd(), 'config', 'secret.json'));
+    nconf.add('user', {type: 'literal', store: _.merge(config, secretConfig)});
 }
 
 require('./db/db.js').init(nconf);
