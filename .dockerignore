@@ -6,3 +6,5 @@ test
 .travis.yml
 README.md
 npm-debug.log
+coverage
+.nyc_output

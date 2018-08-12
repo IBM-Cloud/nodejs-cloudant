@@ -1,3 +1,5 @@
 node_modules
 public
 test
+coverage
+.nyc_output

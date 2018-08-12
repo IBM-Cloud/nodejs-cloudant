@@ -6,7 +6,7 @@
     "start": "node app.js",
     "pretest": "eslint . --format table",
     "test": "NODE_ENV=test nyc mocha test/*.js",
-    "posttest": "cat ./coverage/lcov.info | codacy-coverage --accountToken ${CODACY_ACCOUNT_TOKEN} --username gabriele-decapoa --projectName nodejs-cloudant"
+    "posttest": "cat ./coverage/lcov.info | codacy-coverage --token ${CODACY_TOKEN}"
   },
   "dependencies": {
     "body-parser": "1.18.3",
@@ -38,7 +38,10 @@
   "author": "Gabriele de Capoa <gabriele.decapoa@gmail.com>",
   "nyc": {
     "exclude": [
-      "test/**/*.js"
+      "test/**/*.js",
+      "scripts/",
+      "manifests/",
+      "views"
     ],
     "reporter": [
       "lcov",
