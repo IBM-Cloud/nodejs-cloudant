@@ -1,13 +1,12 @@
 language: node_js
 dist: trusty
-node_js:
-  - 6.14.3
-  - 8.11.3
+node_js: 6.14.3
 sudo: required
 services:
   - docker
 env:
   global:
+    - TRAVIS_SECURE_ENV_VARS=true
     - NODE_ENV=test
 before_script:
   - "docker run -d --privileged --volume cloudant:/srv --name cloudant --hostname cloudant.dev -p 8080:80 ibmcom/cloudant-developer:latest"
