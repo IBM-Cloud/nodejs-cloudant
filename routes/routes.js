@@ -8,7 +8,7 @@ const favorites = require('./favorites.js');
 const attachments = require('./attachments.js');
 
 const health = require('@cloudnative/health-connect');
-let healthcheck = new health.HealthChecker();
+const healthcheck = new health.HealthChecker();
 
 const serveIndex = (req, res) => {
     res.render('index.html', {title: 'Cloudant Boiler Plate'});
@@ -89,21 +89,21 @@ const postAttachments = (req, res) => {
 
 };
 
-const livePromise = new Promise((resolve, reject) => {
+const livePromise = new Promise((resolve) => {
     setTimeout(() => {
         logger.trace('ALIVE!');
         return resolve();
     }, 10);
 });
 
-const readyPromise = new Promise((resolve, reject) => {
+const readyPromise = new Promise((resolve) => {
     setTimeout(() => {
         logger.trace('READY!');
         return resolve();
     }, 10);
 });
 
-const shutdownPromise = new Promise((resolve, reject) => {
+const shutdownPromise = new Promise((resolve) => {
     setTimeout(() => {
         logger.trace('DONE!');
         return resolve();
