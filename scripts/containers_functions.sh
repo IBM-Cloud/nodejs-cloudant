@@ -15,6 +15,7 @@ export CLOUDANT_SERVICE_NAME='cloudantNoSQLDB'
 export CLOUDANT_SERVICE_PLAN='Lite'
 export CLOUDANT_SERVICE_KEY='credentials1'
 
+NAMESPACE='gdecapoa'
 
 DEPLOYMENT_FILE='./kubernetes/deployment.yml'
 SECRET_FILE='./kubernetes/secret.yml'
@@ -31,12 +32,12 @@ function insert_secret {
 }
 
 function substitute_variables_in_secret {
-    sed -i.bak -e 's/$CLOUDANT_URL/'${CLOUDANT_URL}'/g' $1
+    sed -i.bak -e "s/%CLOUDANT_URL%/${CLOUDANT_URL}/g" $1
 }
 
 function substitute_variables_in_deployment {
-    sed -i.bak -e 's/$NAMESPACE/'${NAMESPACE}'/g' $1
-    sed -i.bak -e 's/$VERSION/'${VERSION}'/g' $1
+    sed -i.bak -e "s/%NAMESPACE%/${NAMESPACE}/g" $1
+    sed -i.bak -e "s/%VERSION%/${VERSION}/g" $1
 }
 function check_kubernetes_service_plugin {
     echo -e "${BLUE_COLOR}Verify if ${KUBERNETES_SERVICE_PLUGIN_NAME} plugin is installed${NO_COLOR}"
@@ -80,14 +81,19 @@ function install_kubectl {
 }
 
 function build_image {
-    echo "Building ${DOCKER_SERVER}/${NAMESPACE}/${IMAGE_NAME}:${VERSION} ..."
-    docker build -t ${DOCKER_SERVER}/${NAMESPACE}/${IMAGE_NAME}:${VERSION} .
+    echo -n "${BLUE_COLOR}Which is version of \"nodejs-cloudant\" image you want to build?${NO_COLOR}"
+    read VERSION
+    echo -n "${BLUE_COLOR}Building \"registry.ng.bluemix.net/${NAMESPACE}/nodejs-cloudant:${VERSION}\"...${NO_COLOR}"
+    docker build -t registry.ng.bluemix.net/${NAMESPACE}/nodejs-cloudant:${VERSION} .
+    echo -n "${GREEN_COLOR}\"registry.ng.bluemix.net/${NAMESPACE}/nodejs-cloudant:${VERSION}\" built${NO_COLOR}"
     bx cr login
     CHECK=$(bx cr namespace-list | grep ${NAMESPACE} | wc -l)
     if [[${CHECK} -eq 0 ]; then
         bx cr namespace-add ${NAMESPACE}
     fi
-    docker push ${DOCKER_SERVER}/${NAMESPACE}/${IMAGE_NAME}:${VERSION}
+    echo -n "${BLUE_COLOR}Pushing \"registry.ng.bluemix.net/${NAMESPACE}/nodejs-cloudant:${VERSION}\"...${NO_COLOR}"
+    docker push registry.ng.bluemix.net/${NAMESPACE}/nodejs-cloudant:${VERSION}
+    echo -n "${GREEN_COLOR}\"registry.ng.bluemix.net/${NAMESPACE}/nodejs-cloudant:${VERSION}\" pushed${NO_COLOR}"
 }
 
 
@@ -96,8 +102,8 @@ function provision_kubernetes_secret {
     cp  ${SECRET_FILE} ${secretfile}
 
     bx cf service-key ${CLOUDANT_SERVICE_INSTANCE} ${CLOUDANT_SERVICE_KEY} > tmpCredentialCloudant.json
-    lines_to_ignore=$(cat tmpCredentialCloudant.json | grep -Fn -m1 '{' | awk -F':' '{ print $1 }')
-    export CLOUDANT_URL=$(cat tmpCredentialCloudant.json | tail -n +${lines_to_ignore} | jq '.credentials.url' )
+    lines_to_ignore=$(grep -Fn -m1 '{' tmpCredentialCloudant.json | awk -F':' '{ print $1 }')
+    export CLOUDANT_URL=$(tail -n +${lines_to_ignore} tmpCredentialCloudant.json | jq '.credentials.url' )
 
     substitute_variables_in_secret "./scripts/secret.json"
 

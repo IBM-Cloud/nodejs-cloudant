@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: nodejs-cloudant
-          image: 'registry.ng.bluemix.net/$NAMESPACE/nodejs-cloudant:$VERSION'
+          image: 'registry.ng.bluemix.net/%NAMESPACE%/nodejs-cloudant:%VERSION%'
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
