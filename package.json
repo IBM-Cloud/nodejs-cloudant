@@ -1,6 +1,6 @@
 {
   "name": "cloudant_nodejs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "start": "node app.js",
@@ -26,6 +26,7 @@
     "eslint": "5.3.0",
     "eslint-plugin-promise": "3.8.0",
     "mocha": "5.2.0",
+    "nock": "9.6.0",
     "nyc": "12.0.2",
     "should": "13.2.3",
     "supertest": "3.1.0"

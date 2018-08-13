@@ -30,14 +30,13 @@ module.exports.getFavorites = () => {
                 if (doc._attachments) {
                     const attachments = [];
                     for (const attribute in doc._attachments) {
-
-                        if (doc._attachments.attribute && doc._attachments.attribute.content_type) {
+                        if (doc._attachments[attribute] && doc._attachments[attribute].content_type) {
                             attachments.push({
                                 'key': attribute,
-                                'type': doc._attachments.attribute.content_type
+                                'type': doc._attachments[attribute].content_type
                             });
                         }
-                        logger.debug('%s: %j', attribute, doc._attachments.attribute);
+                        logger.debug('%s: %j', attribute, doc._attachments[attribute]);
                     }
                     responseData = util.createResponseData(
                         doc._id,

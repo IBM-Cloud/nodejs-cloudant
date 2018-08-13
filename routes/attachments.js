@@ -13,7 +13,6 @@ module.exports.getAttachment = (id, key) => {
         logger.debug('START getAttachment');
 
         db.getAttachment(id, key).then((body) => {
-            logger.debug('Response: %j', body);
             return resolve(body);
         }).catch((err) => {
             logger.error(err);
@@ -31,23 +30,36 @@ module.exports.addAttachment = (id, name, value, file) => {
         const _value = util.sanitizeInput(value);
 
 
-        fs.readFile(file.path).then((data) => {
-            return Promise.all([data, (id !== -1 || id !== '') ? db.getDoc(id) : null]);
-        }).then(([data, doc]) => {
-            if (!doc) {
-                return Promise.all([data, db.createDoc({
+        db.getDoc(id).catch((error) => {
+            if (error.message === '404 Object Not Found') {
+                logger.warn('Document with ID %s not existent, creating.');
+                return db.createDoc({
+                    _id: (id !== -1 || id !== '') ? id : null,
                     name: _name,
                     value: _value
-                }).then((doc) => {
-                    return doc;
-                })]);
+                });
+            } else {
+                return reject(error);
             }
-            return [data, doc];
+        }).then((doc) => {
+            return Promise.all([fs.readFile(file.path), doc]);
         }).then(([data, doc]) => {
             logger.debug('file name: %s, file type: %s', file.name, file.type);
-            logger.trace('DOC: %j', doc);
-            return db.addAttachment(doc._id, file.name, data, file.type, {
-                rev: doc._rev
+            logger.trace('doc: %j', doc);
+
+            let revision = null;
+            if (doc.rev) {
+                revision = doc.rev;
+            } else if (doc._rev) {
+                revision = doc._rev;
+            } else {
+                logger.error('Wrong doc format, exit!');
+                return reject(new Error('Wrong doc format'));
+            }
+
+
+            return db.addAttachment(id, file.name, data, file.type, {
+                rev: revision
             });
         }).then((document) => {
             logger.info('Attachment saved successfully.');
