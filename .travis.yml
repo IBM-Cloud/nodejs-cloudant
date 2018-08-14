@@ -1,17 +1,18 @@
 language: node_js
 dist: trusty
-node_js:
-  - 6.14.3
-  - 8.11.3
+node_js: 6.14.3
 sudo: required
 services:
-  - docker
+- docker
 env:
   global:
-    - NODE_ENV=test
+  - TRAVIS_SECURE_ENV_VARS=true
+  - NODE_ENV=test
+  - secure: VQr1XggORKtjJOgBCqpiwaOtn5GwKG+Wr6JtQKVs/TH63p6h6oEWf2kHHbRRM43G9eeymJAvTdvc6JcYxTd26HrUvuWuzXhs3kf8UQwmhhUiYb6b+rWMXt4YoaApLySWkg54UJ/Q8mgzmtqLhwKmDJ+wHJgVVkpMIUWDv77k1ZwEkse3hD4MI3t7rrsfFcbugaSEg8iV/vZ+PAqLkjV8yqRFhdC/53eb3g6yxMvgoOkoQ9Y5mKc+WJrjRFAOcL3LXfyzAmK4lhXPBh9mmF/5pwgPpCZ1XJvVFdf3O931CoSyC4g4zQ2IV79uTG08TG/F3pbmxPL6AekMLhFvW9UJZ2J+Dt6+mnd/+f1TbdzFoSr1KyPnjBRlOjZsRYGmWOtOYOX6DNDqqI0CKY2JoDdivDlXggxkGZ6JcO/J7iGyh4t4sas9ZS6t7xUblwY5VoQk8y1jm0hpXSaYPwp+TUNVS7EopS6hXeqHZjM8KjVOwWUb8Th7aQhXu7jpke+VxnY8fwM7a3zR05hVFtbgIf8kanLaK8Ey+F75xrJamuZRLI1u+vr5XF9JX4GjaLOsvVOp55F2JdN5NXh70mKw6GCor87gA3Km/yBdJokmVdgwYD8ES7Sv3hhH6r2ChtUDW7MTTBsmZzlyZXqqU+v44a8fBBOzRFCWaDViOMaffgJvYtI=
 before_script:
-  - "docker run -d --privileged --volume cloudant:/srv --name cloudant --hostname cloudant.dev -p 8080:80 ibmcom/cloudant-developer:latest"
-  - "docker exec -ti cloudant cast license --silent"
-  - "docker exec cloudant cast database init -v -y -p pass"
-  - "sleep 30"
-  - "curl -s -X 'PUT' http://admin:pass@localhost:8080/my_sample_db"
+- docker run -d --privileged --volume cloudant:/srv --name cloudant --hostname cloudant.dev
+  -p 8080:80 ibmcom/cloudant-developer:latest
+- docker exec -ti cloudant cast license --silent
+- docker exec cloudant cast database init -v -y -p pass
+- sleep 30
+- curl -s -X 'PUT' http://admin:pass@localhost:8080/my_sample_db

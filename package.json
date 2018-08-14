@@ -1,11 +1,12 @@
 {
   "name": "cloudant_nodejs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "start": "node app.js",
     "pretest": "eslint . --format table",
-    "test": "NODE_ENV=test mocha test/*.js"
+    "test": "NODE_ENV=test nyc mocha test/*.js",
+    "posttest": "cat ./coverage/lcov.info | codacy-coverage --token ${CODACY_TOKEN}"
   },
   "dependencies": {
     "body-parser": "1.18.3",
@@ -21,9 +22,12 @@
     "promisify-node": "0.5.0"
   },
   "devDependencies": {
+    "codacy-coverage": "3.0.0",
     "eslint": "5.3.0",
     "eslint-plugin-promise": "3.8.0",
     "mocha": "5.2.0",
+    "nock": "9.6.0",
+    "nyc": "12.0.2",
     "should": "13.2.3",
     "supertest": "3.1.0"
   },
@@ -32,5 +36,17 @@
     "node": "6.14.3",
     "npm": "3.10.10"
   },
-  "author": "Gabriele de Capoa <gabriele.decapoa@gmail.com>"
+  "author": "Gabriele de Capoa <gabriele.decapoa@gmail.com>",
+  "nyc": {
+    "exclude": [
+      "test/**/*.js",
+      "scripts/",
+      "manifests/",
+      "views"
+    ],
+    "reporter": [
+      "lcov",
+      "text"
+    ]
+  }
 }
