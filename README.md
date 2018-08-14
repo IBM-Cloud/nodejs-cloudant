@@ -19,10 +19,11 @@ The UI, written in HTML and jQuery, interacts to a RESTful Express CRUD backend 
    ```
    2. In the second case, you have to create an free instance of *Cloudant NoSQL* on IBM Cloud via UI or via CLI, create a set of credentials then copy the URL from credentials and put in `config/configuration-local.json` file under `cloudant.credentials.url` path
 4. Run `npm install` to install the app's dependencies
-5. Run `npm start` to start the app
-6. Access the running app in a browser at <http://localhost:3000>
+5. Set `NODE_ENV` environment variable to `development`
+6. Run `npm start` to start the app
+7. Access the running app in a browser at <http://localhost:3000>
 
-For each changes you'll perform, run `npm test` and eventually add more test cases.
+For each changes you'll perform, set `NODE_ENV` environment variable to `test` run `npm test` and eventually add more test cases.
 
 ## How to deploy on IBM Cloud Kubernetes cluster
 To build a new Docker image and deploy the application on IBM Cloud Kubernetes cluster, you have to issue the following command:
