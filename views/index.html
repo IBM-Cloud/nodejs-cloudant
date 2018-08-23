@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="myApp">
 <head>
 	<title>Favorites Organizer powered by Cloudant</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<link rel="stylesheet" href="/style/style.css" />
 </head>
-<body>
+<body ng-controller="myController">
 	<div class = "container">
 	<div class = "banner">
 		<img class="newappIcon" src="images/newapp-icon.png">
@@ -25,11 +26,11 @@
 			<!-- <button class='detailBtn' onclick="toggleServiceInfo()" title='Service information'>
 				<img src='images/detail.png' alt='detail'/>
 			-->
-			<button class="addBtn" onclick="addItem()" title="add record">
+			<button class="addBtn" ng-click="addItem()" title="add record">
 				<img src="images/add.png" alt="add">
 			</button>
 			<br>
-			<a class = "infoImg" onclick="toggleAppInfo()">Help</a>
+			<a class = "infoImg" ng-click="toggleAppInfo()">Help</a>
 		</div>
 		<div id='appinfo' class = 'appinfo' style='display: none;'>
 						This application helps you organize your favorite files.</br>
@@ -46,6 +47,7 @@
 	</footer>
 	<script type="text/javascript" src="/scripts/util.js"></script>
 	<script type="text/javascript" src="/scripts/index.js"></script>
+		<script type="text/javascript" src="/scripts/controller.js"></script>
 	<div id="myImage"><div id="innerImg"></div></div>
 	<br><br><br>
 	</div>
