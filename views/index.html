@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<link rel="stylesheet" href="/style/style.css" />
 </head>
-<body ng-app="myApp" ng-controller="myController">
+<body>
 <div class="w3-container">
 	<div class = "banner">
 		<img class="newappIcon" src="images/newapp-icon.png">
@@ -17,36 +17,27 @@
 			Favorites Organizer powered by Cloudant
 		</p>
 	</div>
-		<table class="w3-table w3-bordered w3-striped">
-			<tr>
-				<th>Edit</th>
-				<th>Title</th>
-				<th>Description</th>
-			</tr>
-			<tr ng-repeat="file in files">
-				<td>
-					<button class="w3-btn w3-ripple" ng-click="editUser(file.id)">&#9998; Edit</button>
-				<td>{{ file.title }}</td>
-				<td>{{ file.description }}</td>
-			</tr>
-		</table>
-		<br>
-		<button class="w3-btn w3-green w3-ripple" ng-click="editUser('new')">&#9998; Add New File</button>
-
-		<form ng-hide="hideform">
-			<h3 ng-show="edit">Add New File:</h3>
-			<h3 ng-hide="edit">Edit File:</h3>
-			<label>Title:</label>
-			<input class="w3-input w3-border" type="text" ng-model="fName" ng-disabled="!edit" placeholder="Title">
-			<br>
-			<label>Description:</label>
-			<input class="w3-input w3-border" type="text" ng-model="lName" ng-disabled="!edit" placeholder="Description">
-			<br>
-			<a class = "infoImg" ng-click="toggleAppInfo()">Help</a>
-			<br>
-			<button class="w3-btn w3-green w3-ripple" ng-disabled="error">&#10004; Save Changes</button>
-		</form>
+	<div ng-app="myApp" ng-cloak ng-controller="myController" class="w3-card-2 w3-margin" style="max-width:400px;">
+		<header class="w3-container w3-light-grey w3-padding-16">
+			<h3>My Files Categories</h3>
+		</header>
+		<ul class="w3-ul">
+			<li ng-repeat="x in categories" class="w3-padding-16">{{x}}<span ng-click="removeCategory($index)" style="cursor:pointer;" class="w3-right w3-margin-right">×</span></li>
+		</ul>
+		<div class="w3-container w3-light-grey w3-padding-16">
+			<div class="w3-row w3-margin-top">
+				<div class="w3-col s10">
+					<input placeholder="Add category here" ng-model="addMe" class="w3-input w3-border w3-padding">
+				</div>
+				<div class="w3-col s2">
+					<button ng-click="addCategory()" class="w3-btn w3-padding w3-green">Add</button>
+				</div>
+			</div>
+			<p class="w3-text-red">{{errortext}}</p>
 		</div>
+	</div>
+<br><br><br><br><br>
+<a class = "infoImg" ng-click="toggleAppInfo()">Help</a>
 		<div id='appinfo' class = 'appinfo' style='display: none;'>
 						This application helps you organize your favorite files.</br>
 						Supports all file types, like Audio, Video, Photos, Text etc.</br>
