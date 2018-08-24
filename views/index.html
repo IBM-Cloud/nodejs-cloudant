@@ -1,36 +1,51 @@
 <!DOCTYPE html>
-<html ng-app="myApp">
+<html>
 <head>
 	<title>Favorites Organizer powered by Cloudant</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<link rel="stylesheet" href="/style/style.css" />
 </head>
-<body ng-controller="myController">
-	<div class = "container">
+<body ng-app="myApp" ng-controller="myController">
+<div class="w3-container">
 	<div class = "banner">
 		<img class="newappIcon" src="images/newapp-icon.png">
 		<p class = "appTitle">
 			Favorites Organizer powered by Cloudant
 		</p>
 	</div>
+		<table class="w3-table w3-bordered w3-striped">
+			<tr>
+				<th>Edit</th>
+				<th>Title</th>
+				<th>Description</th>
+			</tr>
+			<tr ng-repeat="file in files">
+				<td>
+					<button class="w3-btn w3-ripple" ng-click="editUser(file.id)">&#9998; Edit</button>
+				<td>{{ file.title }}</td>
+				<td>{{ file.description }}</td>
+			</tr>
+		</table>
+		<br>
+		<button class="w3-btn w3-green w3-ripple" ng-click="editUser('new')">&#9998; Add New File</button>
 
-
-	<section>
-		<table id='notes' class='records' border='0' cellspacing='0' cellpadding='0'><tbody></tbody></table>
-	</section>
-	<footer>
-		<div>
-			<!-- <button class='detailBtn' onclick="toggleServiceInfo()" title='Service information'>
-				<img src='images/detail.png' alt='detail'/>
-			-->
-			<button class="addBtn" ng-click="addItem()" title="add record">
-				<img src="images/add.png" alt="add">
-			</button>
+		<form ng-hide="hideform">
+			<h3 ng-show="edit">Add New File:</h3>
+			<h3 ng-hide="edit">Edit File:</h3>
+			<label>Title:</label>
+			<input class="w3-input w3-border" type="text" ng-model="fName" ng-disabled="!edit" placeholder="Title">
+			<br>
+			<label>Description:</label>
+			<input class="w3-input w3-border" type="text" ng-model="lName" ng-disabled="!edit" placeholder="Description">
 			<br>
 			<a class = "infoImg" ng-click="toggleAppInfo()">Help</a>
+			<br>
+			<button class="w3-btn w3-green w3-ripple" ng-disabled="error">&#10004; Save Changes</button>
+		</form>
 		</div>
 		<div id='appinfo' class = 'appinfo' style='display: none;'>
 						This application helps you organize your favorite files.</br>
@@ -43,8 +58,6 @@
 		</div>
 		<div id="loadingImage"></div>
 		<br><br><br><br><br>
-		<div id="errorDiv" class='errorMsg'></div>
-	</footer>
 	<script type="text/javascript" src="/scripts/util.js"></script>
 	<script type="text/javascript" src="/scripts/index.js"></script>
 		<script type="text/javascript" src="/scripts/controller.js"></script>
