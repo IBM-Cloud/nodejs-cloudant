@@ -17,12 +17,15 @@
 			Favorites Organizer powered by Cloudant
 		</p>
 	</div>
-	<div ng-app="myApp" ng-cloak ng-controller="myController" class="w3-card-2 w3-margin" style="max-width:400px;">
+	<div ng-app="myApp" ng-cloak ng-controller="myController" class="w3-card-2 w3-margin" style="max-width:600px;">
 		<header class="w3-container w3-light-grey w3-padding-16">
 			<h3>My Files Categories</h3>
 		</header>
 		<ul class="w3-ul">
-			<li ng-repeat="x in categories" class="w3-padding-16">{{x}}<span ng-click="removeCategory($index)" style="cursor:pointer;" class="w3-right w3-margin-right">×</span></li>
+			<li ng-repeat="x in categories" class="w3-padding-16">{{x}}<span ng-click="removeCategory($index)" style="cursor:pointer;" class="w3-right w3-margin-right">×</span>
+				<input type="file" ng-file-model="files" multiple />
+				<button type="button" ng-click="upload()">Upload</button>
+			</li>
 		</ul>
 		<div class="w3-container w3-light-grey w3-padding-16">
 			<div class="w3-row w3-margin-top">
@@ -36,7 +39,7 @@
 			<p class="w3-text-red">{{errortext}}</p>
 		</div>
 	</div>
-<br><br><br><br><br>
+<br><br><br><br>
 <a class = "infoImg" ng-click="toggleAppInfo()">Help</a>
 		<div id='appinfo' class = 'appinfo' style='display: none;'>
 						This application helps you organize your favorite files.</br>
