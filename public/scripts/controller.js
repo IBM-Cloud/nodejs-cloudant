@@ -1,4 +1,4 @@
-var app = angular.module("myApp", []);
+var app = angular.module("app", []);
 app.controller("myController", function($scope) {
 
         $scope.categories = ["Video", "BestPhoto", "Photo"];
