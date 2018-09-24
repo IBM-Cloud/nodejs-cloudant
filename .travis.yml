@@ -1,0 +1,17 @@
+language: node_js
+dist: trusty
+node_js:
+  - 6.14.3
+  - 8.11.3
+sudo: required
+services:
+  - docker
+env:
+  global:
+    - NODE_ENV=test
+before_script:
+  - "docker run -d --privileged --volume cloudant:/srv --name cloudant --hostname cloudant.dev -p 8080:80 ibmcom/cloudant-developer:latest"
+  - "docker exec -ti cloudant cast license --silent"
+  - "docker exec cloudant cast database init -v -y -p pass"
+  - "sleep 30"
+  - "curl -s -X 'PUT' http://admin:pass@localhost:8080/my_sample_db"

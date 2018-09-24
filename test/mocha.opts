@@ -1,0 +1,3 @@
+--exit
+--reporter spec
+--ui bdd

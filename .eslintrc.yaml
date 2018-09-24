@@ -1,0 +1,324 @@
+# Limiting ESLint to this project
+root: true
+
+# Environment defines global variables that are predefined
+env:
+  node: true # Node.js global variables and Node.js scoping
+  mocha: true # Adds all of the Mocha testing global variables
+  es6: true # Enable all ECMAScript 6 features except for modules
+
+parserOptions:
+  sourceType: module # Enable ECMAScript module analysis
+  ecmaFeatures: # Additional features
+    generators: false
+    objectLiteralDuplicateProperties: false
+
+plugins:
+  - promise
+
+rules:
+
+  ##################
+  # Best practices #
+  ##################
+
+  # Enforce getter/setter pairs in objects
+  accessor-pairs: 2 # show as error
+  # Treat var statements as if they were block scoped
+  block-scoped-var: 2
+  # Specify the maximum cyclomatic complexity allowed in a program
+  # For reference: http://eslint.org/docs/rules/complexity
+  complexity:
+    - 0 # check disabled
+    - 15 # Max cyclomatic complexity allowed
+  # Specify curly brace conventions for all control statements
+  curly:
+      - 2
+      - all
+  # Encourage use of dot notation whenever possible
+  dot-notation:
+    - 2
+    - allowKeywords: true
+  # Enforce consistent newlines before or after dots
+  dot-location: 1
+  # Require === and !==
+  eqeqeq: 2
+  # Disallow use of arguments.caller or arguments.callee
+  no-caller: 2
+  # Disallow lexical declarations in case/default clauses
+  # For reference: http://eslint.org/docs/rules/no-case-declarations.html
+  no-case-declarations: 1
+  # Disallow use of eval()
+  no-eval: 2
+  # Require use of the second argument for parseInt()
+  radix: 0 # Disabled
+  # Disallow use of the with statement
+  no-with: 2
+  # Disallow use of comma operator
+  no-sequences: 1
+  # Disallow use of `javascript:` urls
+  no-script-url: 2
+  # Disallow use of assignment in return statement
+  no-return-assign: 2
+  # Disallow declaring the same variable more then once
+  no-redeclare: 2
+  # Disallow usage of __proto__ property
+  no-proto: 2
+  # Disallow use of octal escape sequences in string literals, such as
+  # var foo = 'Copyright \251';
+  no-octal-escape: 2
+  # Disallow use of (old style) octal literals
+  no-octal: 2
+  # Disallow creating new instances of String, Number, and Boolean
+  no-new-wrappers: 2
+  # Disallow use of new operator for Function object
+  no-new-func: 2
+  # Disallow use of new operator when not part of the assignment or comparison
+  no-new: 1
+  # Disallow reassignments of native objects
+  no-native-reassign: 2
+  # Disallow use of multi line strings
+  no-multi-str: 2
+  # Disallow use of multiple spaces
+  no-multi-spaces: 2
+  # Disallow creation of functions within loops
+  no-loop-func: 2
+  # Disallow unnecessary nested blocks
+  no-lone-blocks: 2
+  # Disallow use of labels for anything other then loops and switches
+  no-labels:
+    - 2
+    - allowLoop: false # Consider label sticking loop statements
+      allowSwitch: false # Consider label sticking switch statements
+  # Disallow usage of __iterator__ property
+  no-iterator: 2
+  # Disallow this keywords outside of classes or class-like objects
+  no-invalid-this: 2
+  # Disallow use of eval()-like methods
+  no-implied-eval: 2
+  # Disallow the use of leading or trailing decimal points in numeric literals
+  no-floating-decimal: 2
+  # Disallow fallthrough of case statements
+  no-fallthrough: 2
+  # Disallow unnecessary function binding
+  no-extra-bind: 2
+  # Disallow adding to native types
+  no-extend-native: 2
+  # Disallow the use of alert, confirm, and prompt
+  no-alert: 1
+  # Make sure for-in loops have an if statement
+  guard-for-in: 0
+
+  ###################
+  #  Node specific  #
+  ###################
+
+  # Enforces error handling in callbacks (node environment)
+  handle-callback-err:
+    - 2
+    - err
+  # Disallow string concatenation with __dirname and __filename
+  no-path-concat: 1
+  # Disallow use of new operator with the require function
+  no-new-require: 2
+  # Disallow mixing regular variable and require declarations
+  no-mixed-requires: 2
+
+  # Allow process.exit()
+  no-process-exit: 0
+
+  ################
+  #    Errors    #
+  ################
+
+  # Disallow use of console
+  no-console: 1
+  # Disallow unreachable statements after a return, throw, continue, or break statement
+  no-unreachable: 2
+  # Ensure JSDoc comments are valid
+  # For reference: http://eslint.org/docs/rules/valid-jsdoc
+  valid-jsdoc: 0
+  # Disallow unnecessary semicolons
+  no-extra-semi: 2
+
+  #################
+  #   Variables   #
+  #################
+
+  # Disallow use of variables and functions before they are defined
+  no-use-before-define: 1
+  # Disallow declaration of variables that are not used in the code
+  no-unused-vars:
+    - 1 # TODO reset to error (2) after check utility.js#L156
+    - vars: all
+      args: all
+  # Disallow use of undefined when initializing variables
+  no-undef-init: 2
+  # Disallow use of undeclared variables unless mentioned in a /*global */ block
+  no-undef: 2
+  # Disallow shadowing of names such as arguments
+  no-shadow-restricted-names: 2
+  # Disallow labels that share a name with a variable
+  no-label-var: 2
+  # Disallow deletion of variables
+  no-delete-var: 2
+
+  ###############
+  #    Style    #
+  ###############
+
+  # Require or disallow a space immediately following the // or /* in a comment
+  spaced-comment:
+    - 2
+    - always
+    - exceptions:
+      - '-'
+      - '/'
+  # Require or disallow spaces before/after unary operators
+  space-unary-ops:
+      - 2
+      - words: true
+        nonwords: false
+  # Require spaces around operators
+  space-infix-ops: 2
+  # Require or disallow space before function opening parenthesis
+  space-before-function-paren:
+      - 2
+      - anonymous: always
+        named: never
+  # Require or disallow space before blocks
+  space-before-blocks: 2
+  # Enforce spacing before and after semicolons
+  semi-spacing:
+    - 2
+    - before: false
+      after: true
+  # Require or disallow use of semicolons instead of ASI
+  # (automatic semicolon insertion)
+  semi:
+    - 2
+    - always
+  # Specify whether double or single quotes should be used
+  quotes:
+    - 2
+    - single
+    - avoid-escape
+  # Disallow trailing whitespace at the end of lines
+  no-trailing-spaces: 0
+  # Disallow space between function identifier and application
+  # With space-before-function-paren rules, functions signatures are
+  # function () {}
+  no-spaced-func: 2
+  # Disallow use of the Object constructor
+  no-new-object: 2
+  # Disallow nested ternary expressions
+  no-nested-ternary: 2
+  # Disallow use of the Array constructor
+  no-array-constructor: 2
+  # Disallow the omission of parentheses when invoking a constructor with no arguments
+  new-parens: 2
+  # Specify the maximum length of a line in your program
+  max-len:
+    - 2
+    - 250 # max length for code lines
+    - ignoreUrls: true
+      ignoreComments: true
+  # Require a space before and after certain keywords
+  keyword-spacing:
+    - 2
+    - before: true
+      after: true
+  # Enforces spacing between keys and values in object literal properties
+  key-spacing:
+    - 2
+    - beforeColon: false
+      afterColon: true
+  # Enforces use of function declarations or expressions
+  func-style: 0
+  # Enforce newline at the end of file, with no multiple empty lines
+  eol-last: 2
+  # Enforce comma style in array literals, object literals and variable declarations
+  comma-style:
+    - 2
+    - last # comma at the end of the line
+  # Enforce spacing before and after comma
+  comma-spacing:
+    - 2
+    - before: false
+      after: true
+  # Disallow trailing commas
+  comma-dangle:
+    - 2
+    - never
+  # Enforce one true brace style
+  brace-style:
+    - 2
+    - 1tbs
+    - allowSingleLine: true
+  # Enforce spacing inside single-line blocks
+  block-spacing: 2
+  # Enforce consistent indentation
+  indent:
+    - 2
+    - 4 # 4 spaces
+    - SwitchCase: 1 # enforces indentation level for case clauses in switch statements
+      VariableDeclarator: # enforce indentation level for val, let and const
+        var: 1
+        let: 1
+        const: 1
+  # Require JSDoc
+  require-jsdoc:
+    - 0
+    - require:
+        FunctionDeclaration: true
+        MethodDefinition: true
+        ClassDeclaration: true
+
+  ######################
+  #    ECMAScript 6    #
+  ######################
+
+  # Require let or const instead of var
+  no-var: 2
+  # Disallow modifying variables of class declarations
+  no-class-assign: 2
+  # Verify calls of super() in constructors
+  constructor-super: 2
+  # Require space before/after arrow function’s arrow
+  arrow-spacing:
+    - 2
+    - before: true
+      after: true
+  # Suggest using const
+  # This rule is aimed at flagging variables that are declared using let keyword,
+  # but never reassigned after the initial assignment.
+  prefer-const: 1
+  # Enforces braces around the function body
+  arrow-body-style:
+    - 1
+    - always
+
+  ######################
+  #   Promise plugin   #
+  ######################
+
+  # Enforces the use of catch() on un-returned promises
+  promise/catch-or-return:
+    - 2
+    - terminationMethod:
+      - 'catch'
+      - 'then'
+  # Avoid wrapping values in Promise.resolve or Promise.reject when not needed
+  promise/no-return-wrap: 2
+  # Enforce consistent param names when creating new promises
+  promise/param-names: 2
+  # Return inside each then() to create readable and reusable Promise chains
+  promise/always-return: 2
+  # Avoid nested then() or catch() statements
+  promise/no-nesting: 1
+  # Avoid using promises inside of callbacks
+  promise/no-promise-in-callback: 1
+  # Avoid calling cb() inside of a then() (use nodeify instead)
+  promise/no-callback-in-promise: 1
+  # Avoid creating new promises outside of utility libs (use pify instead)
+  promise/avoid-new: 0

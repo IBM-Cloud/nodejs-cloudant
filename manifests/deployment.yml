@@ -1,0 +1,59 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nodejs-cloudant
+spec:
+  replicas: 3 # default value for pod replicas
+  minReadySeconds: 5 # amount of time to wait before create a new pod during rolling update
+  strategy:
+    type: RollingUpdate # force to use RollingUpdate deployment strategy
+    rollingUpdate:
+      maxSurge: 1 # amount of pods that exceed the desired number
+      maxUnavailable: 1 # maximum number of pod that can be unavailable during rolling update
+  revisionHistoryLimit: 1 # number of old ReplicaSets to retain to allow rollback
+  template:
+    metadata:
+      name: nodejs-cloudant
+      labels:
+        app: nodejs-cloudant
+    spec:
+      containers:
+        - name: nodejs-cloudant
+          image: 'registry.ng.bluemix.net/%NAMESPACE%/nodejs-cloudant:%VERSION%'
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          livenessProbe: # Liveness check
+            httpGet: # Use HTTP calls to check liveness
+              path: /health # Probes are sent to the Pod IP
+              port: 3000
+            initialDelaySeconds: 60 # Number of seconds after the container has started before liveness probes are initiated
+            periodSeconds: 30 # How often (in seconds) to perform the probe
+            timeoutSeconds: 20 # Number of seconds after which the probe times out
+            successThreshold: 1 # Minimum consecutive successes for the probe to be considered successful after having failed
+            failureThreshold: 3 # Minimum consecutive failures for the probe to be considered failed after having succeeded
+          readinessProbe: # Readiness check
+            httpGet: # Use HTTP calls to check liveness
+              path: /ready # Probes are sent to the Pod IP
+              port: 3000
+            initialDelaySeconds: 10 # Number of seconds after the container has started before readiness probes are initiated
+            periodSeconds: 30 # How often (in seconds) to perform the probe
+            timeoutSeconds: 20 # Number of seconds after which the probe times out
+            successThreshold: 1 # Minimum consecutive successes for the probe to be considered successful after having failed
+            failureThreshold: 3 # Minimum consecutive failures for the probe to be considered failed after having succeeded
+          volumeMounts:
+            - name: config-volume
+              mountPath: /usr/src/app/config
+            - name: secret-volume
+              mountPath: /usr/src/app/secretConfig
+              readOnly: true
+      volumes:
+        - name: config-volume
+          configMap:
+            # Provide the name of the ConfigMap containing the files you want to add to the container
+            name: nodejs-cloudant-configmap
+        - name: secret-volume
+          secret:
+            secretName: nodejs-cloudant-secret
+      imagePullSecrets:
+        - name: bluemix-default-secret
